@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
+      <router-link to="/">Home</router-link>|
       <router-link to="/about">About</router-link>
     </div>
     <router-view />
@@ -25,5 +25,28 @@
       color: #42b983;
     }
   }
+}
+
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Nunito Sans", sans-serif;
+  outline: none;
+  text-decoration: none;
+}
+
+::placeholder {
+  color: #afafaf;
+}
+
+button:active {
+  transition: all 0.2s ease-in-out;
+  transform: scale(0.96);
+}
+body {
+  background: var(--main-background);
 }
 </style>
