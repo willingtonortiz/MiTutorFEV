@@ -25,7 +25,7 @@
 
                 <div class="field">
                     <label>Contraseña</label>
-                    <input placeholder="Ingrese su contraseña" />
+                    <input type="password" placeholder="Ingrese su contraseña" />
                     
                 </div>
 
@@ -43,9 +43,10 @@
         <h2>Estudiante Nuevo</h2>
         <p>Puedes registrarte de manera gratuita y disfrutar de muchos beneficios</p>
 
-        <a>
-            <button>Registrarme</button>
-        </a>
+        
+        <router-link to="/register">
+        <button>Registrarme</button>
+        </router-link>
     </div>
 
 </div>
@@ -111,7 +112,7 @@
     font-size: 18px;
     font-weight: 600;
     color: $primary-text;
-    opacity:.33;
+    opacity:.67;
     margin-bottom: .5em;
     text-align: left;
 }

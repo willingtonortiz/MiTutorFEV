@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>|
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view />
   </div>
 </template>
@@ -42,10 +38,7 @@
   color: #afafaf;
 }
 
-button:active {
-  transition: all 0.2s ease-in-out;
-  transform: scale(0.96);
-}
+
 body {
   background: var(--main-background);
 }
