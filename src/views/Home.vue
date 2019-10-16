@@ -10,6 +10,7 @@ import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
 import Counter from "@/components/Counter.vue";
 import WeatherForest from "@/components/WeatherForest.vue";
 
+
 @Component({
   components: {
     HelloWorld,

@@ -4,7 +4,7 @@
 
     <div class="login-view">
         <header>
-            <img src="../assets/Logo.svg" />
+            <img src="../assets/logo.png" />
         </header>
 
         <div class="form-login">

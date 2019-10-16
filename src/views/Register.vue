@@ -1,179 +1,292 @@
 <template>
-    <div class="register-container">
-        <header>
-            <div class="logo">
-                <a>
-                    <img src="../assets/Logo.svg" />
-                </a>
-            </div>
+  <div class="register-container">
+    <header>
+      <div class="logo">
+        <a>
+          <img src="../assets/logo.png" />
+        </a>
+      </div>
 
-            <div class="field-login">
-                <a>
-                    <button>Ingresar</button>
-                </a>
-            </div>
-        </header>
+      <div class="field-login">
+        <a>
+          <button>Ingresar</button>
+        </a>
+      </div>
+    </header>
 
-        <div class="register-body">
-            <form
-                method="post"
-                class="register-cont"
-                action="http://localhost:3000/ga"
-                enctype="application/json"
-            >
-                <h2>Registro</h2>
+    <div class="register-body">
+      <form @submitForm="checkForm" class="register-cont">
+        <h2>Registro</h2>
 
-                <div class="field">
-                    <label>Nombres</label>
-                    <input  name="Name" placeholder="Ingrese sus nombres" />
-                </div>
-
-                <div class="field">
-                    <label>Apellidos</label>
-                    <input  name="Lastname" placeholder="Ingrese sus apellidos" />
-                </div>
-                <div class="field">
-                    <label>Carrera</label>
-                    <input name="Career" placeholder="Ingrese su carrera" />
-                </div>
-
-                <div class="field">
-                    <label>Correo electrónico</label>
-                    <input name="Email" placeholder="Ingrese sus email" />
-                </div>
-
-                <div class="field">
-                    <label>Universidad</label>
-                    <select name="University">
-                        <option
-                            value="Universidad Peruana de Ciencias Aplicadas"
-                        >Universidad Peruana de Ciencias Aplicadas</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>Semestre</label>
-                    <select name="Semester">
-                        <option value="1">Primer ciclo</option>
-                        <option value="2">Segundo ciclo</option>
-                        <option value="3">Tercer ciclo</option>
-                        <option value="4">Cuarto ciclo</option>
-                        <option value="5">Quinto ciclo</option>
-                        <option value="6">Sexto ciclo</option>
-                        <option value="7">Septimo ciclo</option>
-                        <option value="8">Octavo ciclo</option>
-                        <option value="9">Noveno ciclo</option>
-                        <option value="10">Décimo ciclo</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>Usuario</label>
-                    <input name="Username" placeholder="Ingrese su nombre de usuario" />
-                </div>
-
-                <div class="field">
-                    <label>Contraseña</label>
-                    <input type="password" name="Password" placeholder="Ingrese su contraseña" />
-                </div>
-                <div class="field">
-                    <button type="submit">Registrarme</button>
-                </div>
-            </form>
+        <div class="field">
+          <label>Nombres</label>
+          <input required v-model="Name" name="Name" placeholder="Ingrese sus nombres" />
         </div>
+
+        <div class="field">
+          <label>Apellidos</label>
+          <input required v-model="Lastname" name="Lastname" placeholder="Ingrese sus apellidos" />
+        </div>
+        <div class="field">
+          <label>Carrera</label>
+          <input required v-model="Career" name="Career" placeholder="Ingrese su carrera" />
+        </div>
+
+        <div class="field">
+          <label>Correo electrónico</label>
+          <input
+            required
+            v-model="Email"
+            v-bind:class="{'not-valid':isEmailExist}"
+            v-on:focusout="validateEmail"
+            type="email"
+            name="Email"
+            placeholder="Ingrese sus email"
+          />
+          <p
+            v-if="isEmailExist"
+            style="color:#ff4766; margin-top:0.5em; font-size:16px;"
+          >Este correo ya existe, por favor ingrese uno diferente</p>
+        </div>
+
+        <div class="field">
+          <label>Universidad</label>
+          <select required v-model="University" name="University">
+            <option
+              v-for="university in Universities"
+              :value="university.universityId"
+            >{{university.name}}</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Semestre</label>
+          <select required v-model="Semester" name="Semester">
+            <option value="1">Primer ciclo</option>
+            <option value="2">Segundo ciclo</option>
+            <option value="3">Tercer ciclo</option>
+            <option value="4">Cuarto ciclo</option>
+            <option value="5">Quinto ciclo</option>
+            <option value="6">Sexto ciclo</option>
+            <option value="7">Septimo ciclo</option>
+            <option value="8">Octavo ciclo</option>
+            <option value="9">Noveno ciclo</option>
+            <option value="10">Décimo ciclo</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Usuario</label>
+          <input
+            required
+            v-model="Username"
+            name="Username"
+            placeholder="Ingrese su nombre de usuario"
+            v-on:focusout="validateUsername"
+            v-bind:class="{'not-valid':isUsernameExist}"
+          />
+          <p
+            v-if="isUsernameExist"
+            style="color:#ff4766; margin-top:0.5em; font-size:16px;"
+          >Este usuario ya existe, por favor ingrese uno diferente</p>
+        </div>
+
+        <div class="field">
+          <label>Contraseña</label>
+          <input
+            required
+            v-model="Password"
+            type="password"
+            name="Password"
+            placeholder="Ingrese su contraseña"
+          />
+        </div>
+        <div class="field">
+          <button v-on:click="checkForm" type="button">Registrarme</button>
+        </div>
+      </form>
     </div>
+  </div>
 </template>
 
 
 
 <script lang="ts">
 import Vue from "vue";
+import axios from "axios";
+import { UserRegister } from "../Interfaces/UserRegister";
+import { RegisterUser, isUsername,isEmail } from "../Service/UserServices";
+import { User } from "../Interfaces/User";
+import { Person } from "../Interfaces/Person";
 
 export default Vue.extend({
-    name: "Register",
- 
+  name: "Register",
+  data(): UserRegister {
+    return {
+      Name: "",
+      Lastname: "",
+      Career: "",
+      Email: "",
+      University: 1,
+      Universities: [],
+      Semester: 1,
+      Username: "",
+      Password: "",
+      isUsernameExist: false,
+      isEmailExist: false
+    };
+  },
+  async created() {
+    let res = await axios.get("https://localhost:5001/Universities");
+    this.Universities = res.data;
+  },
+
+  methods: {
+    async checkForm(): Promise<any> {
+      if (
+        this.Name &&
+        this.Lastname &&
+        this.Career &&
+        this.Email &&
+        this.University &&
+        this.Semester &&
+        this.Username &&
+        this.Password &&
+        !this.isUsernameExist &&
+        !this.isEmailExist
+      ) {
+        let user: User = {
+          Username: this.Username,
+          Password: this.Password,
+          Role: "student",
+          Email: this.Email
+        };
+
+        let person: Person = {
+          Name: this.Name,
+          LastName: this.Lastname,
+          Semester: this.Semester,
+          UniversityId: this.University,
+          UserId: -1
+        };
+
+        await RegisterUser(user, person).then(() => {
+          this.$router.push("/login");
+        });
+      } else {
+        console.log("Falta algunos campos por completar");
+      }
+    },
+    async validateUsername(): Promise<any> {
+      setTimeout(async () => {
+        await isUsername(this.Username).then(data => {
+          console.log(data);
+          if (data) {
+            this.isUsernameExist = true;
+          } else {
+            this.isUsernameExist = false;
+          }
+        });
+      }, 200);
+    },
+    async validateEmail(): Promise<any> {
+      setTimeout(async () => {
+		  await isEmail(this.Email).then(data=>{
+			  console.log(data);
+			  if(data){
+				  this.isEmailExist =  true;
+			  }
+			  else{
+				  this.isEmailExist =  false;
+			  }
+		  })
+	  }, 200);
+    }
+  }
 });
 </script>
 
 
 <style lang="scss">
+.not-valid {
+  border: 1px solid #ff4766 !important;
+}
 .register-container {
-    padding: 2.5em;
+  padding: 2.5em;
 }
 
 .register-container header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .register-container .field-login button {
-    color: $white;
-    background: $primary-color;
-    text-align: center;
-    padding: 12px 0;
-    width: 200px;
-    border-radius: 4px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    font-size: 1.25em;
+  color: $white;
+  background: $primary-color;
+  text-align: center;
+  padding: 12px 0;
+  width: 200px;
+  border-radius: 4px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25em;
 }
 .register-container .register-body .field {
-    display: flex;
-    flex-direction: column;
-    margin: 1.25em 0;
+  display: flex;
+  flex-direction: column;
+  margin: 1.25em 0;
+  text-align: left;
 }
-.register-container .register-body h2{
-    display: flex;
-    justify-content: flex-start;
-
+.register-container .register-body h2 {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .register-container .register-body .register-cont .field label {
-    color: $primary-text;
-    opacity: 0.67;
-    font-weight: 600;
-    text-align: left;
-    margin-bottom: 0.5em;
+  color: $primary-text;
+  opacity: 0.67;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 0.5em;
 }
 
 .register-container .register-body .field input:focus {
-    border: 1px solid $primary-color;
+  border: 1px solid $primary-color;
 }
 
 .register-container .register-body .field input {
-    width: 250px;
-    padding: 12px;
-    border: 1px solid #bfbfbf;
-    color: $primary-text;
-    font-size: 18px;
-    border-radius: 6px;
+  width: 250px;
+  padding: 12px;
+  border: 1px solid #bfbfbf;
+  color: $primary-text;
+  font-size: 18px;
+  border-radius: 6px;
 }
 
 .register-container .register-body .field select {
-    width: 450px;
-    padding: 12px;
-    border: 1px solid #bfbfbf;
-    color: $primary-text;
-    font-size: 18px;
-    border-radius: 6px;
+  width: 450px;
+  padding: 12px;
+  border: 1px solid #bfbfbf;
+  color: $primary-text;
+  font-size: 18px;
+  border-radius: 6px;
 }
 
-
-.register-body .field:last-child{
-    margin-top: 2em !important;
+.register-body .field:last-child {
+  margin-top: 2em !important;
 }
 
 .register-container .register-body .field button {
-    color: $white;
-    background: $primary-color;
-    text-align: center;
-    padding: 12px 0;
-    width: 200px;
-    border-radius: 4px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    font-size: 1.25em;
+  color: $white;
+  background: $primary-color;
+  text-align: center;
+  padding: 12px 0;
+  width: 200px;
+  border-radius: 4px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25em;
 }
 </style>
