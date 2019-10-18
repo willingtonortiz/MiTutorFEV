@@ -20,13 +20,11 @@
                 <div class="field">
                     <label>Usuario o correo</label>
                     <input placeholder="Ingrese su usuario o correo" />
-                    
                 </div>
 
                 <div class="field">
                     <label>Contraseña</label>
                     <input type="password" placeholder="Ingrese su contraseña" />
-                    
                 </div>
 
                 <div class="field">
@@ -50,14 +48,9 @@
     </div>
 
 </div>
-
-
-
 </template>
 
-
 <style lang="scss">
-
 
 .containerLogin{
     & .login-view header{ 
