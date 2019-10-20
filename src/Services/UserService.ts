@@ -16,14 +16,8 @@ export const RegisterUser = async (
 			person
 		}
 	})
-		.then(async (data: any) => {
-			console.log("El registro se ha realizado correctamente");
-			console.log(data);
-		})
-		.catch((e: any) => {
-			console.log("Error en registrar al usuario");
-			console.log(e);
-		});
+		.then(async (data: any) => {})
+		.catch((e: any) => { console.log(e); });
 };
 
 export const isUsername = async (username: any): Promise<any> => {
