@@ -20,34 +20,34 @@
 
             <div class="field">
                 <label>Nombres</label>
-                <input required v-model="Name" name="Name" placeholder="Ingrese sus nombres" />
+                <input required v-model="name" name="Name" placeholder="Ingrese sus nombres" />
             </div>
 
             <div class="field">
                 <label>Apellidos</label>
-                <input required v-model="Lastname" name="Lastname" placeholder="Ingrese sus apellidos" />
+                <input required v-model="lastname" name="Lastname" placeholder="Ingrese sus apellidos" />
             </div>
             <div class="field">
                 <label>Carrera</label>
-                <input required v-model="Career" name="Career" placeholder="Ingrese su carrera" />
+                <input required v-model="career" name="Career" placeholder="Ingrese su carrera" />
             </div>
 
             <div class="field">
                 <label>Correo electrónico</label>
-                <input required v-model="Email" v-bind:class="{'not-valid':isEmailExist}" v-on:focusout="validateEmail" type="email" name="Email" placeholder="Ingrese sus email" />
+                <input required v-model="email" v-bind:class="{'not-valid':isEmailExist}" v-on:focusout="validateEmail" type="email" name="Email" placeholder="Ingrese sus email" />
                 <p v-if="isEmailExist" style="color:#ff4766; margin-top:0.5em; font-size:16px;">Este correo ya existe, por favor ingrese uno diferente</p>
             </div>
 
             <div class="field">
                 <label>Universidad</label>
-                <select required v-model="University" name="University">
-                    <option v-for="university in Universities" :value="university.universityId" v-bind:key="university.id">{{university.name}}</option>
+                <select required v-model="university" name="University">
+                    <option v-for="u in universities" :value="u.universityId" v-bind:key="u.id">{{u.name}}</option>
                 </select>
             </div>
 
             <div class="field">
                 <label>Semestre</label>
-                <select required v-model="Semester" name="Semester">
+                <select required v-model="semester" name="Semester">
                     <option value="1">Primer ciclo</option>
                     <option value="2">Segundo ciclo</option>
                     <option value="3">Tercer ciclo</option>
@@ -63,13 +63,13 @@
 
             <div class="field">
                 <label>Usuario</label>
-                <input required v-model="Username" name="Username" placeholder="Ingrese su nombre de usuario" v-on:focusout="validateUsername" v-bind:class="{'not-valid':isUsernameExist}" />
+                <input required v-model="username" name="Username" placeholder="Ingrese su nombre de usuario" v-on:focusout="validateUsername" v-bind:class="{'not-valid':isUsernameExist}" />
                 <p v-if="isUsernameExist" style="color:#ff4766; margin-top:0.5em; font-size:16px;">Este usuario ya existe, por favor ingrese uno diferente</p>
             </div>
 
             <div class="field">
                 <label>Contraseña</label>
-                <input required v-model="Password" type="password" name="Password" placeholder="Ingrese su contraseña" />
+                <input required v-model="password" type="password" name="Password" placeholder="Ingrese su contraseña" />
             </div>
             <div class="field">
                 <button v-on:click="checkForm" type="button">Registrarme</button>
@@ -101,51 +101,51 @@ export default Vue.extend({
     name: "Register",
     data(): UserRegister {
         return {
-            Name: "",
-            Lastname: "",
-            Career: "",
-            Email: "",
-            University: 1,
-            Universities: [],
-            Semester: 1,
-            Username: "",
-            Password: "",
+            name: "",
+            lastname: "",
+            career: "",
+            email: "",
+            university: 1,
+            universities: [],
+            semester: 1,
+            username: "",
+            password: "",
             isUsernameExist: false,
             isEmailExist: false
         };
     },
     async created() {
         let res = await axios.get("https://localhost:5001/api/universities");
-        this.Universities = res.data;
+        this.universities = res.data;
     },
 
     methods: {
         async checkForm(): Promise < any > {
             if (
-                this.Name &&
-                this.Lastname &&
-                this.Career &&
-                this.Email &&
-                this.University &&
-                this.Semester &&
-                this.Username &&
-                this.Password &&
+                this.name &&
+                this.lastname &&
+                this.career &&
+                this.email &&
+                this.university &&
+                this.semester &&
+                this.username &&
+                this.password &&
                 !this.isUsernameExist &&
                 !this.isEmailExist
             ) {
                 let user: User = {
-                    Username: this.Username,
-                    Password: this.Password,
-                    Role: "student",
-                    Email: this.Email
+                    username: this.username,
+                    password: this.password,
+                    role: "student",
+                    email: this.email
                 };
 
                 let person: Person = {
-                    Name: this.Name,
-                    LastName: this.Lastname,
-                    Semester: this.Semester,
-                    UniversityId: this.University,
-                    UserId: -1
+                    name: this.name,
+                    lastName: this.lastname,
+                    semester: this.semester,
+                    universityId: this.university,
+                    userId: -1
                 };
 
                 await RegisterUser(user, person).then(() => {
@@ -157,7 +157,7 @@ export default Vue.extend({
         },
         async validateUsername(): Promise < any > {
             setTimeout(async () => {
-                await isUsername(this.Username).then((data: any) => {
+                await isUsername(this.username).then((data: any) => {
                     console.log(data);
                     if (data) {
                         this.isUsernameExist = true;
@@ -169,7 +169,7 @@ export default Vue.extend({
         },
         async validateEmail(): Promise < any > {
             setTimeout(async () => {
-                await isEmail(this.Email).then((data: any) => {
+                await isEmail(this.email).then((data: any) => {
                     console.log(data);
                     if (data) {
                         this.isEmailExist = true;
