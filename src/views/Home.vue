@@ -38,7 +38,7 @@ import {
 } from '../Interfaces/Course';
 import {
     TutoringOfferInfo
-} from '../dtos/response/TutoringOfferInfo';
+} from '../dtos/output/TutoringOfferInfo';
 import
 TutoringOfferInfoGroupComponent
 from "../components/Home/TutoringOfferInfoGroupComponent.vue";
@@ -93,7 +93,6 @@ export default class Home extends Vue {
     }
 
     public async findTutoringOffers() {
-        console.log(this.courseName);
         if (this.courseName.length === 0) {
             return;
         }

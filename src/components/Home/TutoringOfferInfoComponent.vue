@@ -2,13 +2,13 @@
 <div class="tutoring-offer-info-container">
     <div class="tutoring-body">
         <div class="image">
-            <p>{{ tutoringOffer.courseName | firstLetter }}</p>
+            <p>{{ tutoringOffer.course | firstLetter }}</p>
         </div>
 
         <div class="course-tutor">
-            <h1>{{ tutoringOffer.courseName | titlecase }}</h1>
+            <h1>{{ tutoringOffer.course | titlecase }}</h1>
             <p>
-                {{ tutoringOffer.tutorName }}
+                {{ tutoringOffer.tutor }}
             </p>
         </div>
     </div>
@@ -39,7 +39,7 @@ import {
 } from "vue-property-decorator";
 import {
     TutoringOfferInfo
-} from '../../dtos/response/TutoringOfferInfo';
+} from '../../dtos/output/TutoringOfferInfo';
 
 @Component({
     components: {},

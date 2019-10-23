@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { uri } from "./environment";
-import { TutoringOfferInfo } from "@/dtos/response/TutoringOfferInfo";
+import { TutoringOfferInfo } from "@/dtos/output/TutoringOfferInfo";
 
 export class TutoringOfferService {
 	constructor() {}
@@ -20,11 +20,5 @@ export class TutoringOfferService {
 		} catch (error) {
 			return Promise.reject(error);
 		}
-
-		// return axios({
-		// 	headers: { "Content-Type": "application/json" },
-		// 	method: "GET",
-		// 	url: `${uri}/universities/${universityId}/courses/${courseId}/tutoringOffers`
-		// });
 	}
 }

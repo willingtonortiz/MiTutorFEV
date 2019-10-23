@@ -13,22 +13,14 @@ export class CourseService {
 			const response: AxiosResponse<Course> = await axios.get<Course>(
 				`${uri}/universities/${universityId}/courses`,
 				{
-					// headers: { "Content-Type": "application/json" },
 					params: {
 						courseName
 					}
 				}
 			);
 
-			return Promise.resolve(response.data);
-			// return new Promise<Course>((resolve, reject) => {
-			// 	resolve(response.data);
-			// });
+			return Promise.resolve(response.data[0]);
 		} catch (error) {
-			// return new Promise<Course>((resolve, reject) => {
-			// 	reject(error);
-			// });
-
 			return Promise.reject(error);
 		}
 	}

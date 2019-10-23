@@ -31,7 +31,7 @@ import {
 import TutoringOfferInfoComponent from "./TutoringOfferInfoComponent.vue";
 import {
     TutoringOfferInfo
-} from '../../dtos/response/TutoringOfferInfo';
+} from '../../dtos/output/TutoringOfferInfo';
 
 @Component({
     components: {
