@@ -2,6 +2,8 @@ import axios from "axios";
 import { uri } from "./environment";
 import { Person } from "@/Interfaces/Person";
 import { User } from "@/Interfaces/User";
+import {  SubscriptionDTO } from "../Interfaces/SubscriptionDTO";
+
 
 export const RegisterUser = async (
 	newuser : User & Person
@@ -36,3 +38,16 @@ export const isEmail = async (email: any): Promise<any> => {
 
 	return res.data;
 };
+
+export const subscription =  async (subscriptionDTO: SubscriptionDTO): Promise<any> =>{
+	return await axios({
+		headers: {"Content-Type": "application/json"},
+		method:"POST",
+		url: `${uri}/Users/Subscription`,
+		data:subscriptionDTO
+	})
+	.then ( (data)=>{console.log(data)})
+	.catch( (e)=>{console.log(e)})
+}
+
+
