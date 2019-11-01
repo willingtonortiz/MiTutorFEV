@@ -4,19 +4,18 @@ import { Person } from "@/Interfaces/Person";
 import { User } from "@/Interfaces/User";
 
 export const RegisterUser = async (
-	user: User,
-	person: Person
+	newuser : User & Person
 ): Promise<any> => {
+
+	console.log(newuser);
+
 	return await axios({
 		headers: { "Content-Type": "application/json" },
 		method: "POST",
-		url: `${uri}/authentication/register`,
-		data: {
-			user,
-			person
-		}
+		url: `${uri}/Authentication/register`,
+		data: newuser
 	})
-		.then(async (data: any) => {})
+		.then(async (data: any) => {console.log(data)})
 		.catch((e: any) => { console.log(e); });
 };
 

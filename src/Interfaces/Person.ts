@@ -3,5 +3,5 @@ export interface Person {
 	lastName: string;
 	semester: number;
 	universityId: number;
-	userId: number;
+	userId?: number;
 }

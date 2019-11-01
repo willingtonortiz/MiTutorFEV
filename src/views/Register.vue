@@ -152,22 +152,20 @@ export default Vue.extend({
         !this.isUsernameExist &&
         !this.isEmailExist
       ) {
-        let user: User = {
+        type UserCreated = User & Person;
+
+        let newUser: UserCreated = {
           username: this.username,
           password: this.password,
-          role: "student",
-          email: this.email
-        };
-
-        let person: Person = {
+          email: this.email,
           name: this.name,
           lastName: this.lastname,
           semester: this.semester,
-          universityId: this.university,
-          userId: -1
+          universityId: this.university
         };
 
-        await RegisterUser(user, person).then(() => {
+        console.log(newUser);
+        await RegisterUser(newUser).then(() => {
           this.$router.push("/login");
         });
       }
