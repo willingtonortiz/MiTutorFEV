@@ -6,6 +6,9 @@ import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 import About from "./views/About.vue";
 import Subscription from "./views/Subscription.vue";
+import PublishTutoringOfferView from "./views/PublishTutoringOffer.vue"
+import PublishTutoringSessionView from "./views/PublishTutoringSession.vue"
+
 Vue.use(Router);
 
 export default new Router({
@@ -39,6 +42,16 @@ export default new Router({
       path: "/home/subscription",
       name: "subscription",
       component: Subscription
+    },
+    {
+      path: "/tutor/:id/publishtutoringoffer",
+      name: "publishTutoringOffer",
+      component: PublishTutoringOfferView 
+    },
+    {
+      path: "/tutor/:id/publishtutoringSession",
+      name: "publishTutoringSession",
+      component: PublishTutoringSessionView
     }
   ]
 });
