@@ -25,7 +25,6 @@ export default Vue.extend( {
      },
      props: ["TutoringSessionAux"],
      created(){
-          console.log(this.TutoringSessionAux);
           this.TutoringSession = this.TutoringSessionAux;
      }
 })
