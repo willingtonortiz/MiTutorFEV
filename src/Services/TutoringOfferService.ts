@@ -6,6 +6,7 @@ import { Course } from '@/Interfaces/Course';
 import { Topic } from '@/Interfaces/Topic';
 import { TutorService } from "../Services/TutorService";
 import { UniversityResponse } from '@/Interfaces/UniversityResponse';
+import { TutoringOfferResponse } from '@/dtos/output/TutoringOfferResponse';
 
 export class TutoringOfferService {
 	constructor() {}
@@ -59,6 +60,19 @@ export class TutoringOfferService {
 		try {
 			const response: AxiosResponse<Array<Topic>> = await axios.get<Array<Topic>>(
 				`${uri}/courses/${courseId}/topics`
+			);
+			return Promise.resolve(response.data);
+		} catch (error) {
+			return Promise.reject(error);
+		}
+
+	}
+
+
+	public async findById(tutoringId : TutoringOfferResponse): Promise<TutoringOfferResponse> {
+		try {
+			const response: AxiosResponse<TutoringOfferResponse> = await axios.get<TutoringOfferResponse>(
+				`${uri}/tutoringOffers/${tutoringId}`
 			);
 			return Promise.resolve(response.data);
 		} catch (error) {

@@ -6,9 +6,10 @@ import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 import About from "./views/About.vue";
 import Subscription from "./views/Subscription.vue";
-import PublishTutoringOfferView from "./views/PublishTutoringOffer.vue"
-import PublishTutoringSessionView from "./views/PublishTutoringSession.vue"
-
+import PublishTutoringOffer from "./views/PublishTutoringOffer.vue"
+import PublishTutoringSession from "./views/PublishTutoringSession.vue"
+import TutoringOffer from "./views/TutoringOffer.vue"
+import TutoringSession from "./views/TutoringSession.vue"
 Vue.use(Router);
 
 export default new Router({
@@ -46,12 +47,25 @@ export default new Router({
     {
       path: "/tutor/:id/publishtutoringoffer",
       name: "publishTutoringOffer",
-      component: PublishTutoringOfferView 
+      component: PublishTutoringOffer
     },
     {
-      path: "/tutor/:id/publishtutoringSession",
+      path: "/tutor/:id/publishtutoringsession",
       name: "publishTutoringSession",
-      component: PublishTutoringSessionView
+      component: PublishTutoringSession
+    },
+    {
+      path: "/tutoringoffer/:id",
+      name: "tutoringOffer",
+      component: TutoringOffer
+    },
+    {
+      path: "/tutoringsession/:id",
+      name: "tutoringSession",
+      component: TutoringSession,
+      props: true
     }
+
+
   ]
 });

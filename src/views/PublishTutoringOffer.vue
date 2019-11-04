@@ -69,7 +69,7 @@ import { Course } from '../Interfaces/Course';
 
 export default Vue.extend ({
 
-  name: "PublishTutoringOfferView",
+  name: "PublishTutoringOffer",
   components: { vSelect },
   data() {
     return {

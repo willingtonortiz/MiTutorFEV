@@ -139,7 +139,7 @@ function testPrice(price){
 }
 
 export default Vue.extend ({
-  name: "PublishTutoringSessionView",
+  name: "PublishTutoringSession",
   computed: mapGetters(["TutoringOfferCourse","TutoringSessions","TutoringOffer"]),
   components: { vSelect, TopicElement },
   data() {
