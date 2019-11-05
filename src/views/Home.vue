@@ -100,12 +100,12 @@ export default class Home extends Vue {
         try {
             // Finding courses 
             const course: Course = await this.courseService.findByUniversityIdAndCourseName(
-                10, this.courseName.toLowerCase()
+                1, this.courseName.toLowerCase()
             );
 
             // Finding tutoring offers
             const tutoringOffers: Array < TutoringOfferInfo > = await this.tutoringOfferService.findByUniversityIdAndCourseId(
-                10, course.courseId!
+                1, course.courseId!
             );
 
             this.tutoringOffers = tutoringOffers;
