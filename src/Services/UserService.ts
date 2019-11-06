@@ -1,8 +1,8 @@
 import axios from "axios";
 import { uri } from "./environment";
-import { Person } from "@/Interfaces/Person";
-import { User } from "@/Interfaces/User";
-import {  SubscriptionDTO } from "../Interfaces/SubscriptionDTO";
+import { Person } from "@/Models/Person";
+import { User } from "@/Models/User";
+import {  SubscriptionDTO } from "../Models/SubscriptionDTO";
 
 
 export const RegisterUser = async (

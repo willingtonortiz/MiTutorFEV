@@ -1,4 +1,4 @@
-import {  University} from "../Interfaces/University";
+import {  University} from ".//University";
 
 export interface UserRegister {
 	name: string;

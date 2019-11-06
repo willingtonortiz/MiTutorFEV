@@ -1,6 +1,6 @@
 import axios from "axios";
 import { uri } from "./environment";
-import {  University} from "../Interfaces/University";
+import {  University} from "../Models/University";
 export class UniversityService {
 	
 	constructor() {

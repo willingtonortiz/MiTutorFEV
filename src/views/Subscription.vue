@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { SubscriptionDTO } from "../Interfaces/SubscriptionDTO";
+import { SubscriptionDTO } from "../Models/SubscriptionDTO";
 import {  subscription} from "../Services/UserService";
 export default Vue.extend({
   name: "Subscription",

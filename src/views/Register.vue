@@ -3,7 +3,7 @@
     <header>
       <div class="logo">
         <a>
-          <img src="../assets/logo.png" />
+          <img src="../assets/images/logo.png" />
         </a>
       </div>
 
@@ -109,10 +109,10 @@
 <script lang="ts">
 import Vue from "vue";
 import axios from "axios";
-import { UserRegister } from "../Interfaces/UserRegister";
+import { UserRegister } from "../Models/UserRegister";
 import { RegisterUser, isUsername, isEmail } from "../Services/UserService";
-import { User } from "../Interfaces/User";
-import { Person } from "../Interfaces/Person";
+import { User } from "../Models/User";
+import { Person } from "../Models/Person";
 
 import { UniversityService } from "../Services/UniversityService";
 export default Vue.extend({

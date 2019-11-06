@@ -1,196 +1,188 @@
 <template>
-<div class="home-container">
-    <nav class="navbar">
-        <div class="logo">
-            log
-            <!-- <img src="../assets/logo.png" /> -->
-        </div>
-        <div class="search">
-            <input type="text" v-model="courseName" @keyup.enter="findTutoringOffers" placeholder="Busca algún curso" />
-        </div>
-        <div class="avatar">
-            photo
-        </div>
-    </nav>
+	<div class="home-container">
+		<nav class="navbar">
+			<div class="logo">
+				log
+			</div>
+			<div class="search">
+				<input
+						type="text"
+						placeholder="Busca algún curso"
+						v-model="courseName"
+						v-on:keyup="findTutoringOffersAndTutors"
+				/>
+			</div>
+			<div class="avatar">
+				photo
+			</div>
+		</nav>
 
-    <div class="side-bar">
-        <button>Quiero ser tutor</button>
-    </div>
+		<HomeSideBarComponent class="home-side-bar-component"></HomeSideBarComponent>
 
-    <TutoringOfferInfoGroupComponent v-bind:tutoringOffers="tutoringOffers"></TutoringOfferInfoGroupComponent>
+		<div class="results">
+			<TutoringOfferInfoGroupComponent></TutoringOfferInfoGroupComponent>
 
-</div>
+			<TutorInfoGroupComponent></TutorInfoGroupComponent>
+		</div>
+	</div>
+
 </template>
 
 <script lang="ts">
-import {
-    Component,
-    Vue
-} from "vue-property-decorator";
-import {
-    CourseService
-} from "../Services/CourseService"
-import {
-    TutoringOfferService
-} from "../Services/TutoringOfferService"
-import {
-    Course
-} from '../Interfaces/Course';
-import {
-    TutoringOfferInfo
-} from '../dtos/output/TutoringOfferInfo';
-import
-TutoringOfferInfoGroupComponent
-from "../components/Home/TutoringOfferInfoGroupComponent.vue";
-
-@Component({
-    components: {
+    import {
+        Component,
+        Vue
+    } from "vue-property-decorator";
+    import {
+        CourseService
+    } from "../Services/CourseService"
+    import {
+        TutoringOfferService
+    } from "../Services/TutoringOfferService"
+    import {
+        Course
+    } from '../Models/Course';
+    import {
+        TutoringOfferInfo
+    } from '../dtos/output/TutoringOfferInfo';
+    import
         TutoringOfferInfoGroupComponent
-    },
-    props: {},
-    filters: {
-        firstLetter: function (value: string): string {
-            if (!value) return "";
+        from "../components/Home/TutoringOfferInfoGroupComponent.vue";
+    import HomeSideBarComponent from "@/components/Home/HomeSideBarComponent.vue";
+    import TutorInfoGroupComponent from "@/components/Home/TutorInfoGroupComponent.vue";
 
-            return value.charAt(0).toUpperCase();
+    @Component({
+        components: {
+            TutorInfoGroupComponent,
+            HomeSideBarComponent,
+            TutoringOfferInfoGroupComponent
         },
-        titlecase: function (value: string): string {
-            if (!value) return "";
+        props: {},
+        filters: {
+            firstLetter: function (value: string): string {
+                if (!value) return "";
 
-            return value.charAt(0).toUpperCase() + value.slice(1);
-        },
-        simpleDate: function (value: Date): string {
-            if (!value) return "";
+                return value.charAt(0).toUpperCase();
+            },
+            titlecase: function (value: string): string {
+                if (!value) return "";
 
-            return value.getDate() + "/" + (value.getMonth() + 1) + "/" + value.getFullYear();
-        },
-        simpleTime: function (value: Date): string {
-            if (!value) return "";
+                return value.charAt(0).toUpperCase() + value.slice(1);
+            },
+            simpleDate: function (value: Date): string {
+                if (!value) return "";
 
-            return value.getHours() + ":" + value.getMinutes();
+                return value.getDate() + "/" + (value.getMonth() + 1) + "/" + value.getFullYear();
+            },
+            simpleTime: function (value: Date): string {
+                if (!value) return "";
+
+                return value.getHours() + ":" + value.getMinutes();
+            }
         }
-    }
-})
-export default class Home extends Vue {
-    // Servicios
-    private tutoringOfferService: TutoringOfferService;
-    private courseService: CourseService;
+    })
+    export default class Home extends Vue {
+        public courseName: string;
 
-    // datos
-    public tutoringOffers: any[];
-    public courseName: string;
+        public constructor() {
+            super();
+            // Servicios
 
-    public constructor() {
-        super();
-        // Servicios
-        this.courseService = new CourseService();
-        this.tutoringOfferService = new TutoringOfferService();
+            this.courseName = "calculo 2";
 
-        this.tutoringOffers = [];
-        this.courseName = "calculo 2";
-
-        // this.findTutoringOffers();
-    }
-
-    public async findTutoringOffers() {
-        if (this.courseName.length === 0) {
-            return;
+            // this.findTutoringOffers();
         }
 
-        try {
-            // Finding courses 
-            const course: Course = await this.courseService.findByUniversityIdAndCourseName(
-                1, this.courseName.toLowerCase()
-            );
+        public async findTutoringOffersAndTutors() {
+            if (this.courseName.length === 0) {
+                return;
+            }
 
-            // Finding tutoring offers
-            const tutoringOffers: Array < TutoringOfferInfo > = await this.tutoringOfferService.findByUniversityIdAndCourseId(
-                1, course.courseId!
-            );
+            try {
 
-            this.tutoringOffers = tutoringOffers;
-            this.tutoringOffers.forEach((element: any) => {
-                element.startTime = new Date(element.startTime);
-                element.endTime = new Date(element.endTime);
-            });
+                await this.$store.dispatch("fetchTutoringOffers", this.courseName.toLowerCase());
 
-        } catch (error) {
-            this.tutoringOffers = [];
-            console.log(error);
+                await this.$store.dispatch("fetchTutors", this.courseName.toLowerCase());
+
+
+            } catch (error) {
+                console.log(error);
+            }
         }
 
+        created() {
+            this.findTutoringOffersAndTutors();
+        }
     }
-}
 </script>
 
 <style lang="scss" scoped>
-.home-container {
+	.home-container {
+		.navbar {
+			padding: 16px;
+			display: flex;
+			flex-flow: row nowrap;
 
-    .navbar {
-        // border: 1px solid red;
-        padding: 16px;
-        display: flex;
-        flex-flow: row nowrap;
+			justify-content: space-around;
+			align-items: center;
 
-        justify-content: space-around;
-        align-items: center;
+			.search {
+				input {
+					padding: 8px;
+					border: 1px solid lightgray;
+					border-radius: 5px;
+					font-size: 16px;
+				}
+			}
+		}
 
-        .search {
-            input {
-                padding: 8px;
-                border: 1px solid lightgray;
-                border-radius: 5px;
-                font-size: 16px;
-            }
-        }
-    }
+		.home-side-bar-component {
+			display: none;
+		}
 
-    .side-bar {
-        display: none;
-    }
-}
+		.results {
+		}
+	}
 
-@media only screen and (min-width: 768px) {}
+	@media only screen and (min-width: 768px) {
+	}
 
-@media only screen and (min-width: 1024px) {
-    .home-container {
-        height: 100vh;
-        display: grid;
-        grid-template-columns: 3fr 9fr;
-        grid-template-rows: min-content;
-        gap: 16px;
-        align-items: flex-start;
+	@media only screen and (min-width: 1024px) {
+		.home-container {
+			height: 100vh;
+			padding: 16px 32px;
 
-        .navbar {
-            grid-column: 1 / span 2;
-        }
+			display: grid;
+			grid-template-columns: 3fr 9fr;
+			grid-template-rows: min-content;
+			gap: 32px;
+			align-items: flex-start;
 
-        .side-bar {
-            grid-column: 1 / span 1;
-            align-self: stretch;
+			.navbar,
+			.home-side-bar-component,
+			.results {
+				// border: 1px solid blue;
+				box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
+				border-radius: 10px;
+			}
 
-            margin: 16px;
-            box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+			.navbar {
+				grid-column: 1 / span 2;
+			}
 
-            button {
-                padding: 12px 20px;
-                background-color: #4e83ed;
-                color: white;
-                border-radius: 5px;
-                border: none;
-                font-size: 18px;
-                font-weight: normal;
-                cursor: pointer;
-            }
-        }
+			.home-side-bar-component {
+				display: block;
+				grid-column: 1 / span 1;
+				align-self: stretch;
+			}
 
-        TutoringOfferInfoGroupComponent{
-            border: 5px solid green;
-        }
-    }
-}
+			.results {
+				grid-column: 2 / span 1;
+				align-self: stretch;
+				display: flex;
+				flex-flow: column wrap;
+			}
+		}
+	}
+
 </style>
