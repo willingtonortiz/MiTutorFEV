@@ -13,6 +13,7 @@ Vue.filter("titleCase", function(value: string): string {
 });
 
 Vue.filter("simpleDate", function(value: Date): string {
+
 	if (!value) return "";
 
 	return (
