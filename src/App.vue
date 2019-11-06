@@ -45,3 +45,20 @@
 		background: var(--main-background);
 	}
 </style>
+
+<style>
+	.style-chooser .vs__search::placeholder,
+	.style-chooser .vs__dropdown-toggle,
+	.style-chooser .vs__dropdown-menu {
+		background: #dfe5fb;
+		border: none;
+		color: #394066;
+		text-transform: lowercase;
+		font-size: 150%;
+	}
+
+	.style-chooser .vs__clear,
+	.style-chooser .vs__open-indicator {
+		fill: #394066;
+	}
+</style>

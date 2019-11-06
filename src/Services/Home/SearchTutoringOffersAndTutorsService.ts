@@ -15,6 +15,7 @@ export default class SearchTutoringOffersAndTutorsService {
         courseName: string
     ): Promise<Array<TutoringOfferInfo>> {
         try {
+
             const course: Course = await CourseService.findByUniversityIdAndCourseName(
                 1,
                 courseName.toLowerCase()

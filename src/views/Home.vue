@@ -9,7 +9,7 @@
 						type="text"
 						placeholder="Busca algún curso"
 						v-model="courseName"
-						v-on:keyup="findTutoringOffersAndTutors"
+						v-on:keyup.enter="findTutoringOffersAndTutors"
 				/>
 			</div>
 			<div class="avatar">
@@ -88,9 +88,7 @@
             super();
             // Servicios
 
-            this.courseName = "calculo 2";
-
-            // this.findTutoringOffers();
+            this.courseName = "";
         }
 
         public async findTutoringOffersAndTutors() {
@@ -99,7 +97,6 @@
             }
 
             try {
-
                 await this.$store.dispatch("fetchTutoringOffers", this.courseName.toLowerCase());
 
                 await this.$store.dispatch("fetchTutors", this.courseName.toLowerCase());
@@ -111,7 +108,6 @@
         }
 
         created() {
-            this.findTutoringOffersAndTutors();
         }
     }
 </script>

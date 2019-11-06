@@ -15,7 +15,7 @@ export class CourseService {
                 `${uri}/universities/${universityId}/courses`,
                 {
                     params: {
-                        name: courseName
+                        courseName
                     }
                 }
             );

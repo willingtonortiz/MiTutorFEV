@@ -25,16 +25,26 @@ export default {
     },
     actions: {
         async fetchTutoringOffers(context, courseName: string) {
-            const tutoringOffers: Array<TutoringOfferInfo> = await SearchTutoringOffersAndTutorsService
-                .findTutoringOffersByCourseName(courseName);
+            try {
 
-            context.commit('setTutoringOffers', tutoringOffers);
+                const tutoringOffers: Array<TutoringOfferInfo> = await SearchTutoringOffersAndTutorsService
+                    .findTutoringOffersByCourseName(courseName);
+
+                context.commit('setTutoringOffers', tutoringOffers);
+            } catch (error) {
+                context.commit("setTutoringOffers", []);
+            }
         },
         async fetchTutors(context, courseName: string) {
-            const tutors: Array<TutorInfo> = await SearchTutoringOffersAndTutorsService
-                .findTutorsByCourseName(courseName);
+            try {
 
-            context.commit('setTutors', tutors);
+                const tutors: Array<TutorInfo> = await SearchTutoringOffersAndTutorsService
+                    .findTutorsByCourseName(courseName);
+
+                context.commit('setTutors', tutors);
+            } catch (error) {
+                context.commit("setTutors", []);
+            }
         }
     }
 }
