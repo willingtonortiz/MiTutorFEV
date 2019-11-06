@@ -39,6 +39,7 @@
 
 
 <script lang="ts">
+
 import Vue from "vue";
 import { TutoringOfferResponse } from "../dtos/output/TutoringOfferResponse";
 import { TutoringOfferService } from "../Services/TutoringOfferService";
@@ -80,8 +81,8 @@ export default Vue.extend({
     this.TutoringOffer = await offerService.findById(this.$route.params.id);
   }
 });
-</script>
 
+</script>
 
 
 
@@ -127,8 +128,5 @@ export default Vue.extend({
   color: var(--primary-text);
   text-align: center;
 }
-
-
-
 
 </style>
