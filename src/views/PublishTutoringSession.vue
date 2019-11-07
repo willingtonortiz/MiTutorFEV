@@ -79,7 +79,7 @@
           style=" margin-bottom:5%; width:100%;"> Crear Session</button>
       </div>
 
-      <hr />
+      
       <div v-if="SessionsCreated.length>0" style="margin-bottom:10%">
           <h2 style="margin-top:5%">Sesiones creadas</h2>
           <div class="sessionscreated" v-for="e in SessionsCreated" :key="e">
@@ -453,5 +453,9 @@ export default Vue.extend ({
   .container-nuevatutoria .form-container form .field button {
     width: 300px;
   }
+  .v-select, .v-select *,.container-nuevatutoria .btn{
+    width: 300px !important;
+  }
+  
 }
 </style>
