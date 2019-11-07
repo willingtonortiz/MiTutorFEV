@@ -3,6 +3,8 @@ import Vuex from "vuex";
 
 import {TutoringOfferRequest} from "@/Models/TutoringOfferRequest";
 import HomeModule from "./modules/HomeModule";
+import ProfileModalModule from "@/store/modules/ProfileModalModule";
+import ProfileCourseList from "@/store/modules/ProfileCourseList";
 
 Vue.use(Vuex);
 
@@ -64,6 +66,8 @@ export default new Vuex.Store({
     mutations,
     actions,
     modules: {
-        HomeModule
+        HomeModule,
+        ProfileModalModule,
+        ProfileCourseList
     }
 });

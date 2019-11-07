@@ -9,6 +9,7 @@ import PublishTutoringOffer from "./views/PublishTutoringOffer.vue"
 import PublishTutoringSession from "./views/PublishTutoringSession.vue"
 import TutoringOffer from "./views/TutoringOffer.vue"
 import TutoringSession from "./views/TutoringSession.vue"
+import ProfileContainerPage from "@/views/ProfileContainerPage.vue";
 
 Vue.use(Router);
 
@@ -65,6 +66,11 @@ export default new Router({
             name: "tutoringSession",
             component: TutoringSession,
             props: true
+        },
+        {
+            path: "/profile",
+            name: "profile",
+            component: ProfileContainerPage
         }
     ]
 });
