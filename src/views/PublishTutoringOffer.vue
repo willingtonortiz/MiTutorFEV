@@ -277,6 +277,13 @@ export default Vue.extend ({
   .container-nuevatutoria .form-container form .field button {
     width: 300px;
   }
+
+  .container-nuevatutoria .btn{
+    width: 300px !important;
+  }
+  .v-select, .v-select *{
+    width: 300px !important;
+  }
 }
 
 

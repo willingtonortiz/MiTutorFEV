@@ -2,7 +2,7 @@
 	<div class="home-container">
 		<nav class="navbar">
 			<div class="logo">
-				log
+				<img src="../assets/images/LogoSingle.png" alt="">
 			</div>
 			<div class="search">
 				<input

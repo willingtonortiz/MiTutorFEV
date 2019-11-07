@@ -2,9 +2,10 @@
   <div class="register-container">
     <header>
       <div class="logo">
-        <a>
+
+        <router-link to="/login">
           <img src="../assets/images/logo.png" />
-        </a>
+        </router-link>
       </div>
 
       <div class="field-login">
@@ -111,10 +112,11 @@ import Vue from "vue";
 import axios from "axios";
 import { UserRegister } from "../Models/UserRegister";
 import { RegisterUser, isUsername, isEmail } from "../Services/UserService";
-import { User } from "../Models/User";
+
 import { Person } from "../Models/Person";
 
 import { UniversityService } from "../Services/UniversityService";
+import { User } from '../Models/User';
 export default Vue.extend({
   name: "Register",
   data(): UserRegister {
@@ -161,12 +163,15 @@ export default Vue.extend({
           name: this.name,
           lastName: this.lastname,
           semester: this.semester,
-          universityId: this.university
+          universityId: this.university,
+          career: this.career
+          
         };
 
         console.log(newUser);
         await RegisterUser(newUser).then(() => {
           this.$router.push("/login");
+          
         });
       }
     },
@@ -281,5 +286,17 @@ export default Vue.extend({
   border: none;
   cursor: pointer;
   font-size: 1.25em;
+}
+
+@media (max-width:720px) {
+  .register-container .register-body .field select {
+    width: 300px;
+  }
+  .field-login{display: none}
+
+  .register-container header{
+    padding: .5em 0 !important;
+  }
+
 }
 </style>

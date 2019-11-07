@@ -4,4 +4,5 @@ export interface Person {
 	semester: number;
 	universityId: number;
 	userId?: number;
+	career:string
 }

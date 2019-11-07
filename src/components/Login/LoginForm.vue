@@ -131,5 +131,22 @@
 			}
 		}
 	}
+	
+@media (max-width:720px) {
+
+	.form-login input{
+		width: 300px !important;
+	}
+	
+	.form-login{
+		margin: 0 !important;
+	}
+
+	button{
+		width: 300px !important;
+	}
+    
+
+}
 
 </style>
