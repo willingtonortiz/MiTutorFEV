@@ -7,7 +7,7 @@
 			</div>
 
 			<div class="new-tutoring">
-				<button>Nueva tutoría</button>
+				<button v-on:click="navigateToPublishNewTutoringOffer()">Nueva tutoría</button>
 			</div>
 		</div>
 
@@ -66,6 +66,11 @@
             this.initialize();
         }
 
+
+		public async navigateToPublishNewTutoringOffer(){
+			let idUser =  AuthenticationService.userValue.id;
+			this.$router.push(`/tutor/${idUser}/publishtutoringoffer`);
+		}
         public async initialize() {
             try {
                 // TODO: Validar que el usuario se haya autenticado

@@ -1,8 +1,8 @@
 <template>
 	<div class="home-side-bar-component">
-		<StudentSideBarComponent v-if="role === 'STUDENT'"></StudentSideBarComponent>
+		<StudentSideBarComponent v-if="role === 'student'"></StudentSideBarComponent>
 
-		<TutorSideBarComponent v-if="role === 'TUTOR'"></TutorSideBarComponent>
+		<TutorSideBarComponent v-if="role === 'tutor'"></TutorSideBarComponent>
 	</div>
 </template>
 

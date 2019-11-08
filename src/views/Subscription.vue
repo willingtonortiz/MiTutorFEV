@@ -46,11 +46,13 @@
 import Vue from "vue";
 import { SubscriptionDTO } from "../Models/SubscriptionDTO";
 import { subscription } from "../Services/UserService";
+import AuthenticationService from "../Services/AuthenticationService";
+import { UserCredentials } from "../dtos/UserCredentials";
 export default Vue.extend({
   name: "Subscription",
   data(): SubscriptionDTO {
     return {
-      userId: 8,
+      userId: AuthenticationService.userValue.id,
       creditCard: "",
       ccv: "",
       expirationDate: ""
@@ -66,7 +68,13 @@ export default Vue.extend({
           creditCard: this.creditCard
         };
 
-        await subscription(subscriptionDTO);
+        await subscription(subscriptionDTO).then(() => {
+          const user: UserCredentials = AuthenticationService.userValue;
+          user.role = "tutor";
+          localStorage.setItem("currentUser", JSON.stringify(user));
+
+          this.$router.push("/home");
+        });
       }
     }
   }
@@ -121,18 +129,18 @@ export default Vue.extend({
   font-weight: 600;
 }
 @media (max-width: 720px) {
-    header{
-        margin-bottom: 1em !important;
-    }
-    .container-subscription{
-        width: 100%;
-    }
+  header {
+    margin-bottom: 1em !important;
+  }
+  .container-subscription {
+    width: 100%;
+  }
 
-    .subscription-body .subscription-form{
-        margin: 1em auto 0 auto;
-    }
-    .container-subscription h2 {
-      margin: .5em 0;
-    }
+  .subscription-body .subscription-form {
+    margin: 1em auto 0 auto;
+  }
+  .container-subscription h2 {
+    margin: 0.5em 0;
+  }
 }
 </style>

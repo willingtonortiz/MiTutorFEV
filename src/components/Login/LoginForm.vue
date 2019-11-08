@@ -49,7 +49,8 @@
             try {
                 const user: UserCredentials = await AuthenticationService.login(this.username, this.password);
 
-                console.log(user);
+				console.log(user);
+				this.$router.push("/");
             } catch (error) {
                 console.log("ERROR EN LOGINFORM");
             }

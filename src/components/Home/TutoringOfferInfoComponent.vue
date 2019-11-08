@@ -1,5 +1,5 @@
 <template>
-	<div class="tutoring-offer-info-container">
+	<div v-on:click="navigateToDetails(tutoringOffer.id)" class="tutoring-offer-info-container">
 		<div class="tutoring-body">
 			<div class="image">
 				<p>{{ tutoringOffer.courseName | firstLetter }}</p>
@@ -36,16 +36,25 @@
         Component,
         Prop,
         Vue
-    } from "vue-property-decorator";
+	} from "vue-property-decorator";
+	import {  Route} from "vue-router";
     import {
         TutoringOfferInfo
     } from '../../dtos/output/TutoringOfferInfo';
+import router from '../../router';
 
     @Component({
         components: {},
         props: {
             tutoringOffer: Object
-        },
+		},
+		methods:{
+			navigateToDetails : (id)=>{
+				router.push(`/tutoringoffer/${id}`);
+
+				
+			}
+		},
         filters: {
             firstLetter: function (value: string): string {
                 if (!value) return "";
@@ -76,7 +85,8 @@
             super();
 
             // this.tutoringOffer = {};
-        }
+		}
+		
     }
 </script>
 

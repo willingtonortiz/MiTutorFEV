@@ -7,6 +7,7 @@
 			</div>
 
 			<div class="body">
+				
 				<TutoringOfferInfoComponent
 						class="tutoring-offer-info-component"
 						v-for="(item, index) in tutoringOffers"
@@ -15,13 +16,11 @@
 			</div>
 		</div>
 
-		<!-- <ng-template #notFound> -->
 		<div v-else>
 			<div class="errorMessage">
 				<p>No se encontraron tutorías</p>
 			</div>
 		</div>
-		<!-- </ng-template> -->
 	</div>
 </template>
 

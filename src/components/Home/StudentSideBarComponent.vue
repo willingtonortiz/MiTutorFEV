@@ -2,7 +2,7 @@
 	<div class="student-side-bar-container">
 		<!-- TODO Realizar el link hacia la vista de suscripciones -->
 
-		<router-link class="button" to="/suscription">Quiero ser tutor</router-link>
+		<router-link class="button" to="/home/subscription">Quiero ser tutor</router-link>
 
 	</div>
 </template>

@@ -1,7 +1,5 @@
 <template>
-    
   <div class="container-tutoriaDetail-master">
-   
     <Header></Header>
 
     <div class="container-tutoria-details">
@@ -25,29 +23,40 @@
           </div>
 
           <div class="detail">
-             <p class="label-detail">Universidad</p>
+            <p class="label-detail">Universidad</p>
             <p class="text-detail">{{TutoringOffer.university}}</p>
           </div>
         </div>
-
       </div>
-
+      <div>
+        <h2>Sesiones</h2>
+        <div class="list-sessions">
+          <TutoringSessionCard
+            
+            v-for="session in TutoringOffer.sessions"
+            v-bind:key="session.tutoringOfferId"
+            v-bind:session="session"
+            v-bind:TutoringOffer="TutoringOffer"
+          ></TutoringSessionCard>
+        </div>
+      </div>
     </div>
-    
   </div>
 </template>
 
 
 <script lang="ts">
-
 import Vue from "vue";
 import { TutoringOfferResponse } from "../dtos/output/TutoringOfferResponse";
 import { TutoringOfferService } from "../Services/TutoringOfferService";
-import  Header from "../components/Header.vue";
+import TutoringSessionCard from "../components/TutoringOffer/TutoringSessionCard.vue";
+import Header from "../components/Header.vue";
+import { Component } from "vue-property-decorator";
 
 export default Vue.extend({
   name: "TutoringOffer",
-  components :{Header},
+  components: { Header, TutoringSessionCard },
+
   data() {
     return {
       TutoringOffer: {
@@ -60,28 +69,39 @@ export default Vue.extend({
         EndTime: null,
         Capacity: null,
         Topics: [],
-        Sessions: []
+        Sessions: [],
+        tutorId:null
       } as TutoringOfferResponse
     };
   },
-  filters:{
-    simpleDate: function(value: Date): string {    
-        return new Date(value).toLocaleString();
+  filters: {
+    simpleDate: function(value: Date): string {
+      return new Date(value).toLocaleString();
     }
   },
 
   methods: {
-      sessionDetail(index){
-          this.$router.push({name: 'tutoringSession',  params: { id: index , TutoringSessionAux: this.TutoringOffer.sessions[index]}});
-      }
+    
+    sessionDetail(index) {
+      this.$router.push({
+        name: "tutoringSession",
+        params: {
+          id: index,
+          TutoringSessionAux: this.TutoringOffer.sessions[index]
+        }
+      });
+    }
   },
 
   async created() {
     let offerService: TutoringOfferService = new TutoringOfferService();
+    await offerService.findById(this.$route.params.id).then( res=>{
+      console.log(res);
+    })
     this.TutoringOffer = await offerService.findById(this.$route.params.id);
+    console.log(this.TutoringOffer);
   }
 });
-
 </script>
 
 
@@ -92,7 +112,6 @@ export default Vue.extend({
 .container-tutoriaDetail-master {
   background: var(--main-background);
   margin-top: 2%;
-  
 }
 
 .container-tutoria-details {
@@ -128,5 +147,7 @@ export default Vue.extend({
   color: var(--primary-text);
   text-align: center;
 }
-
+.list-sessions{
+  display: flex;
+}
 </style>

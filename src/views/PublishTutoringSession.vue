@@ -113,6 +113,7 @@ import { TutoringSessionRequest } from "../Models/TutoringSessionRequest";
 import { TutoringOfferService } from "../Services/TutoringOfferService";
 import TopicElement from "../components/PublishTutoring/TopicElement.vue";
 import { Topic } from '../Models/Topic';
+import AuthenticationService from '../Services/AuthenticationService';
 
 function arrayRemove(arr, value) {
   return arr.filter(x => x.id !== value);
@@ -151,7 +152,8 @@ export default Vue.extend ({
         EndTime: null,
         Description: '',
         Price: null,
-        Topics: []
+        Topics: [],
+        TutorId:AuthenticationService.userValue.id
       } as TutoringSessionRequest,
 
       TopicsByCourse: [],
@@ -281,7 +283,7 @@ export default Vue.extend ({
 
       let tutoringOfferObj: TutoringOfferRequest = this.$store.getters.TutoringOffer;
       let offerService = new TutoringOfferService();
-    
+      console.log("Publicando la oferta completa");
       offerService.createTutoringOffer(tutoringOfferObj);
       this.cancel();
     },
@@ -301,7 +303,7 @@ export default Vue.extend ({
         this.selected= null;
         this.errors= [];
         this.validated= false;
-        this.$router.push({name: 'login'});
+        this.$router.push({name: 'home'});
 
     }
 
