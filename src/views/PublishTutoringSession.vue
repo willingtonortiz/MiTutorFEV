@@ -202,7 +202,7 @@ export default Vue.extend ({
           val = false; 
         }
 
-        if( this.TutoringSession.StartTime == null ){
+        if( this.TutoringSession.EndTime == null ){
           this.errors.push('Establezca la fecha de fin');
           val = false;
         } else if( this.TutoringSession.EndTime.length == 0 ){
