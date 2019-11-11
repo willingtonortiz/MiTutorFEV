@@ -65,6 +65,7 @@ import "vue-select/dist/vue-select.css";
 import { mapActions } from "vuex";
 import {TutoringOfferRequest} from "../Models/TutoringOfferRequest"
 import { TutoringOfferService } from "../Services/TutoringOfferService";
+import  AuthenticationService  from "../Services/AuthenticationService";
 import { Course } from '../Models/Course';
 
 export default Vue.extend ({
@@ -79,8 +80,9 @@ export default Vue.extend ({
             Description: '',
             CourseId: null,
             UniversityId: null,
-            TutorId: +this.$route.params.id ,
+            TutorId: AuthenticationService.userValue.id,
             TutoringSessionRequests: [],
+            
         } as TutoringOfferRequest,
 
         courses: [],
@@ -155,7 +157,30 @@ export default Vue.extend ({
             label: courses[i].name
           });
         } 
+  },
+
+  destroyed(){
+
+      this.TutoringOffer = {   
+            Capacity: null,
+            Description: '',
+            CourseId: null,
+            UniversityId: null,
+            TutorId: null,
+            TutoringSessionRequests: [],
+            
+        } as TutoringOfferRequest,
+
+      this.courses= [];
+      this.selected= null;
+      this.validate= false;
+      this.errors= [];
+
   }
+
+  
+
+  
 
 });
 </script>

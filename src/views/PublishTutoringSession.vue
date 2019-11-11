@@ -69,7 +69,7 @@
       </form>
 
       <div v-for="topic in TopicsSelected" :key="topic.id">
-        <TopicElement v-bind:topic="topic" v-on:del-topic="deleteTopic"></TopicElement>
+        <ElementList v-bind:element="topic.name" v-on:del-element="deleteTopic(topic.id)"></ElementList>
       </div>
 
       <div class="field" style="margin-top:5%">
@@ -82,11 +82,8 @@
       
       <div v-if="SessionsCreated.length>0" style="margin-bottom:10%">
           <h2 style="margin-top:5%">Sesiones creadas</h2>
-          <div class="sessionscreated" v-for="e in SessionsCreated" :key="e">
-            <p>Session N°:
-              {{e}}
-              <button v-on:click="deleteSessionAux(e)" class="del">x</button>
-            </p>
+          <div class="sessionscreated" v-for="(e,index) in SessionsCreated" :key="e">
+         
           </div>
       </div>
 
@@ -111,13 +108,11 @@ import { mapActions, mapGetters } from "vuex";
 import { TutoringOfferRequest } from "../Models/TutoringOfferRequest";
 import { TutoringSessionRequest } from "../Models/TutoringSessionRequest";
 import { TutoringOfferService } from "../Services/TutoringOfferService";
-import TopicElement from "../components/PublishTutoring/TopicElement.vue";
 import { Topic } from '../Models/Topic';
+import ElementList from "../components/PublishTutoring/ElementList.vue";
 import AuthenticationService from '../Services/AuthenticationService';
 
-function arrayRemove(arr, value) {
-  return arr.filter(x => x.id !== value);
-}
+
 
 function containsTopic(id, list) {
   var i;
@@ -142,7 +137,7 @@ function testPrice(price){
 export default Vue.extend ({
   name: "PublishTutoringSession",
   computed: mapGetters(["TutoringOfferCourse","TutoringSessions","TutoringOffer"]),
-  components: { vSelect, TopicElement },
+  components: { vSelect, ElementList },
   data() {
     return {
 
@@ -231,9 +226,8 @@ export default Vue.extend ({
           this.TutoringSession.Topics.push(this.TopicsSelected[i].id);
         }
 
-
-        this.addSession(this.TutoringSession);
-    
+        this.SessionsCreated.push(this.TutoringSession);
+        
         this.TutoringSession = {
             Place: '',
             StartTime: '',
@@ -247,8 +241,7 @@ export default Vue.extend ({
         this.selected= null;
         this.errors= [];
         this.validated= false; 
-        
-        this.SessionsCreated.push(this.SessionsCreated.length);
+         
       }
 
     },
@@ -264,57 +257,41 @@ export default Vue.extend ({
     },
 
     deleteTopic(id) {
-      this.TopicsSelected = arrayRemove(this.TopicsSelected, id);
+      this.TopicsSelected = this.TopicsSelected.filter(x => x.id !== id);
     },
 
     deleteSessionAux(index){
-
-      if(this.SessionsCreated.length>0){  
-        for(let i=index+1; i< this.SessionsCreated.length ;++i)
-           --this.SessionsCreated[i];
-      }
-
-      this.SessionsCreated[index]
-      this.SessionsCreated.splice(index,1); 
-      this.deleteSession(index);
+     this.SessionsCreated = this.SessionsCreated.splice(index,1); 
     },
 
     publish(){
 
-      let tutoringOfferObj: TutoringOfferRequest = this.$store.getters.TutoringOffer;
-      let offerService = new TutoringOfferService();
-      console.log("Publicando la oferta completa");
-      offerService.createTutoringOffer(tutoringOfferObj);
-      this.cancel();
+      if(this.SessionsCreated.length >0){
+        let tutoringOfferObj: TutoringOfferRequest = this.$store.getters.TutoringOffer;
+        let offerService = new TutoringOfferService();
+
+        tutoringOfferObj.TutoringSessionRequests = this.SessionsCreated;
+
+        console.log("Publicando la oferta completa");
+        offerService.createTutoringOffer(tutoringOfferObj);
+        this.cancel();  
+      } else{
+        this.errors.push('Debe de haber minimo una sesion');
+      }
+
     },
 
     cancel(){
         this.reset();
-        this.TutoringSession = {
-            Place: '',
-            StartTime: '',
-            EndTime: '',
-            Description: '',
-            Price: '',
-            Topics: []
-        }
-
-        this.TopicsSelected= [];
-        this.selected= null;
-        this.errors= [];
-        this.validated= false;
         this.$router.push({name: 'home'});
-
     }
 
   },
 
   async created() {
 
-
     let offerService = new TutoringOfferService();
     let topics: Array<Topic> = await offerService.findTopicsByCourse(this.$store.getters.TutoringOfferCourse);
-
    
     for (let i = 0; i < topics.length; ++i) {
         
@@ -323,7 +300,27 @@ export default Vue.extend ({
           label: topics[i].name
         });
     }
+  },
+
+  destroyed(){
+        this.reset();
+        this.TutoringSession = {
+            Place: '',
+            StartTime: null,
+            EndTime: null,
+            Description: '',
+            Price: null,
+            Topics: [],
+            TutorId: null
+        }
+
+        this.TopicsSelected= [];
+        this.selected= null;
+        this.errors= [];
+        this.validated= false;
   }
+
+  
 });
 
 </script>
