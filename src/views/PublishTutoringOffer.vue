@@ -67,6 +67,8 @@ import {TutoringOfferRequest} from "../Models/TutoringOfferRequest"
 import { TutoringOfferService } from "../Services/TutoringOfferService";
 import  AuthenticationService  from "../Services/AuthenticationService";
 import { Course } from '../Models/Course';
+import { TutorService } from '../Services/TutorService';
+import { UniversityResponse } from '../Models/UniversityResponse';
 
 export default Vue.extend ({
 
@@ -149,7 +151,13 @@ export default Vue.extend ({
 
   async created() {
     let offerService = new TutoringOfferService();
-    let courses: Array<Course> = await offerService.findAllCourses();
+    let tutorService = new TutorService();
+
+    let tutorUniversity: UniversityResponse = await tutorService.findUniversity(AuthenticationService.userValue.id);
+    console.log(tutorUniversity);
+    this.TutoringOffer.UniversityId = tutorUniversity.universityId;
+
+    let courses: Array<Course> = await offerService.findAllCoursesByUniversity(this.TutoringOffer.UniversityId);
 
         for (let i = 0; i <courses.length; ++i) {
           this.courses.push({

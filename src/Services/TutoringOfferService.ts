@@ -58,10 +58,10 @@ export class TutoringOfferService {
         }
     }
 
-    public async findAllCourses(): Promise<Array<Course>> {
+    public async findAllCoursesByUniversity(universityId: number): Promise<Array<Course>> {
         try {
             const response: AxiosResponse<Array<Course>> = await axios.get<Array<Course>>(
-                `${uri}/courses`
+                `${uri}/universities/${universityId}/courses`
             );
             return Promise.resolve(response.data);
         } catch (error) {

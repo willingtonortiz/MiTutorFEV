@@ -57,6 +57,8 @@
           <textarea name="Description" v-model="TutoringSession.Description" cols="30" rows="10"></textarea>
         </div>
 
+   
+
         <div class="field">
           <label for>Seleccione un tema</label>
           <v-select
@@ -68,29 +70,40 @@
         </div>
       </form>
 
-      <div v-for="topic in TopicsSelected" :key="topic.id">
-        <ElementList v-bind:element="topic.name" v-on:del-element="deleteTopic(topic.id)"></ElementList>
+      <div v-if="TopicsSelected.length>0">
+          <div v-for="topic in TopicsSelected" :key="topic.id">
+              <ElementList v-bind:element="topic.name" v-on:del-element="deleteTopic(topic.id)"></ElementList>    
+          </div>  
       </div>
 
-      <div class="field" style="margin-top:5%">
+      <div class="field">
         <button
           class="btn"
           v-on:click="addSessionAux"
-          style=" margin-bottom:5%; width:100%;"> Crear Session</button>
+          style="width:100%; margin-bottom:5%"> Crear Session</button>
       </div>
 
-      
-      <div v-if="SessionsCreated.length>0" style="margin-bottom:10%">
-          <h2 style="margin-top:5%">Sesiones creadas</h2>
-          <div class="sessionscreated" v-for="(e,index) in SessionsCreated" :key="e">
-         
+     
+     
+      <div v-if="SessionsCreated.length>0">   
+         <hr /> 
+         <h2 style="margin-top:5%">Sesiones creadas</h2>
+         <div class="sessionscreated" v-for="(e,index) in SessionsCreated" :key="e">
+           <p>Session N°:
+             {{index}}
+             <button v-on:click="deleteSessionAux(index)" class="del">x</button>
+           </p>      
+         </div>    
+      </div>
+
+ 
+      <div class="field" style="margin-top:5%;">   
+          <div style="float:left; margin-right:5%; ">
+             <button v-on:click="publish" class="btn"  style="width: 325px; margin-top:0%"  >Publicar oferta</button>
           </div>
-      </div>
-
-
-      <div v-if="SessionsCreated.length>0"  class="field" style="margin-top:5%">   
-          <button v-on:click="publish" class="btn" style="margin-right:5%">Publicar oferta</button>
-          <button v-on:click="cancel" class="btn">Cancelar</button>
+          <div>
+             <button v-on:click="cancel" class="btn" style="width: 335px; margin-top:0%">Cancelar</button>
+          </div>
       </div>
 
     </div>
@@ -381,6 +394,7 @@ export default Vue.extend ({
   display: flex;
   flex-direction: column;
 }
+ 
 
 .container-nuevatutoria .form-container form .field label {
   font-size: 20px;
