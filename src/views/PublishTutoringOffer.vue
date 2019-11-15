@@ -20,6 +20,7 @@
             v-model="selected"
             :options="courses"
             @input="onSelection"
+            
           ></v-select>
         </div>
 
@@ -62,7 +63,7 @@
 import Vue from "vue";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters} from "vuex";
 import {TutoringOfferRequest} from "../Models/TutoringOfferRequest"
 import { TutoringOfferService } from "../Services/TutoringOfferService";
 import  AuthenticationService  from "../Services/AuthenticationService";
@@ -73,6 +74,7 @@ import { UniversityResponse } from '../Models/UniversityResponse';
 export default Vue.extend ({
 
   name: "PublishTutoringOffer",
+  computed: mapGetters(["GetTutoringOffer"]),
   components: { vSelect },
   data() {
     return {
@@ -150,21 +152,41 @@ export default Vue.extend ({
   },
 
   async created() {
+
+    this.TutoringOffer = this.$store.getters.GetTutoringOffer;
+
+
+    
+
     let offerService = new TutoringOfferService();
     let tutorService = new TutorService();
-
     let tutorUniversity: UniversityResponse = await tutorService.findUniversity(AuthenticationService.userValue.id);
     console.log(tutorUniversity);
     this.TutoringOffer.UniversityId = tutorUniversity.universityId;
-
     let courses: Array<Course> = await offerService.findAllCoursesByUniversity(this.TutoringOffer.UniversityId);
 
-        for (let i = 0; i <courses.length; ++i) {
-          this.courses.push({
+
+    for (let i = 0; i <courses.length; ++i) {
+      this.courses.push({
             value: courses[i].id,
             label: courses[i].name
           });
-        } 
+
+      if(this.TutoringOffer.CourseId !==null && courses[i].id === this.TutoringOffer.CourseId) {
+        this.selected = {
+           value: courses[i].id,
+          label: courses[i].name
+        }
+      }
+    }
+
+
+   
+
+
+        
+  
+
   },
 
   destroyed(){

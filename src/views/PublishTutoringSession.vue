@@ -80,7 +80,7 @@
         <button
           class="btn"
           v-on:click="addSessionAux"
-          style="width:100%; margin-bottom:5%"> Crear Session</button>
+          style="width:100%; margin-bottom:5%"> {{bottomMessage}}</button>
       </div>
 
      
@@ -88,9 +88,11 @@
       <div v-if="SessionsCreated.length>0">   
          <hr /> 
          <h2 style="margin-top:5%">Sesiones creadas</h2>
-         <div class="sessionscreated" v-for="(e,index) in SessionsCreated" :key="e">
+         <div class="sessionscreated" v-for="(e,index) in SessionsCreated" :key="index" >
            <p>Session N°:
              {{index}}
+
+             <button v-on:click="updateSession(index)" class="upd">x</button>
              <button v-on:click="deleteSessionAux(index)" class="del">x</button>
            </p>      
          </div>    
@@ -149,7 +151,7 @@ function testPrice(price){
 
 export default Vue.extend ({
   name: "PublishTutoringSession",
-  computed: mapGetters(["TutoringOfferCourse","TutoringSessions","TutoringOffer"]),
+  computed: mapGetters(["TutoringOfferCourse","TutoringSessionByIndex","GetTutoringOffer"]),
   components: { vSelect, ElementList },
   data() {
     return {
@@ -170,6 +172,9 @@ export default Vue.extend ({
       errors: [],
       validated: false, 
       SessionsCreated: [],
+      update :false,
+      bottomMessage: '',
+      sessionUpdateIndex: null
 
     };
   },
@@ -233,33 +238,42 @@ export default Vue.extend ({
 
       this.checkForm();
 
-      if(this.validated){
+      if(this.validated) {
 
         for (let i =0 ; i<this.TopicsSelected.length; ++i) {
           this.TutoringSession.Topics.push(this.TopicsSelected[i].id);
         }
 
-        this.SessionsCreated.push(this.TutoringSession);
-        
+        if(this.update){
+            this.SessionsCreated[this.sessionUpdateIndex]=this.TutoringSession;
+            this.sessionUpdateIndex=null;
+            this.update = false;
+            this.bottomMessage = 'Crear sesion';     
+          
+        } else {
+            this.SessionsCreated.push(this.TutoringSession);
+        }
+
         this.TutoringSession = {
-            Place: '',
-            StartTime: '',
-            EndTime: '',
-            Description: '',
-            Price: '',
-            Topics: []
+                Place: '',
+                StartTime: '',
+                EndTime: '',
+                Description: '',
+                Price: '',
+                Topics: []
         };
 
         this.TopicsSelected= [];
         this.selected= null;
         this.errors= [];
         this.validated= false; 
-         
-      }
+      }  
 
     },
 
-    onSelection() {
+    onSelection(value) {
+
+      console.log(value);
  
       if ( !containsTopic(this.selected.value, this.TopicsSelected) ) {
           this.TopicsSelected.push({
@@ -273,14 +287,14 @@ export default Vue.extend ({
       this.TopicsSelected = this.TopicsSelected.filter(x => x.id !== id);
     },
 
-    deleteSessionAux(index){
-     this.SessionsCreated = this.SessionsCreated.splice(index,1); 
+    deleteSessionAux(index){  
+      this.SessionsCreated.splice(index,1);  
     },
 
     publish(){
 
       if(this.SessionsCreated.length >0){
-        let tutoringOfferObj: TutoringOfferRequest = this.$store.getters.TutoringOffer;
+        let tutoringOfferObj: TutoringOfferRequest = this.$store.getters.GetTutoringOffer;
         let offerService = new TutoringOfferService();
 
         tutoringOfferObj.TutoringSessionRequests = this.SessionsCreated;
@@ -297,11 +311,45 @@ export default Vue.extend ({
     cancel(){
         this.reset();
         this.$router.push({name: 'home'});
-    }
+    },
+
+    updateSession(index){
+      
+        this.TutoringSession = this.SessionsCreated[index];
+
+        for(let i=0; i<this.TopicsByCourse.length ; ++i){
+          
+          for(let j=0; j<this.TutoringSession.Topics.length ; ++j){
+
+            if(this.TopicsByCourse[i].value === this.TutoringSession.Topics[j]){
+
+              this.TopicsSelected.push({
+                id:this.TopicsByCourse[i].value,
+                name: this.TopicsByCourse[i].label
+              });
+            
+            }
+          }
+        }
+
+        this.TutoringSession.Topics = [];
+
+        this.update=true;
+        this.bottomMessage = 'Actualizar sesion';
+        this.sessionUpdateIndex=index;
+    },
 
   },
 
   async created() {
+
+    if(this.update == false){
+      this.bottomMessage = 'Crear sesion'
+    } else{
+      this.bottomMessage = 'Actualizar sesion'
+    }
+
+
 
     let offerService = new TutoringOfferService();
     let topics: Array<Topic> = await offerService.findTopicsByCourse(this.$store.getters.TutoringOfferCourse);
@@ -352,6 +400,17 @@ export default Vue.extend ({
 
 .del {
     background: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 5px 9px;
+    border-radius: 50%;
+    cursor: pointer;
+    float: right;
+  }
+
+
+.upd {
+    background: #0105f3;
     color: #fff;
     border: none;
     padding: 5px 9px;

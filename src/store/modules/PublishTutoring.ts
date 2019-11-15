@@ -17,9 +17,10 @@ const getDefaultState = () => {
 const state = getDefaultState();
 
 const getters = {
-    TutoringOffer: (state) => state.TutoringOffer,
+    GetTutoringOffer: (state) => state.TutoringOffer,
     TutoringSessions: (state) => state.TutoringOffer.TutoringSessionsRequests,
     TutoringOfferCourse: (state) => state.TutoringOffer.CourseId,
+    TutoringSessionByIndex : (state,index) => state.TutoringOffer.TutoringSessionsRequests[index]
 };
 
 const mutations = {
