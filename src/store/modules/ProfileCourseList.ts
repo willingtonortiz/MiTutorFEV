@@ -23,7 +23,7 @@ export default {
             context.commit("addCourse", course);
         },
         async fetchCourses(context) {
-            const courses: Array<Course> = await CourseService.findAllByTutorId(1);
+            const courses: Array<Course> = await CourseService.findAllByTutorId(8);
             context.commit("fetchCourses", courses);
         }
     },

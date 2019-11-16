@@ -79,7 +79,7 @@
                     );
 
                     const result = await CourseService.addCourseToTutorByTutorIdAndCourseId(
-                        1,
+                        8,
                         foundCourse.id
                     );
 

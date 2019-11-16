@@ -1,6 +1,6 @@
 export default {
     state: {
-        shouldDisplay: true,
+        shouldDisplay: false,
         modalCode: 1
     },
     getters: {
