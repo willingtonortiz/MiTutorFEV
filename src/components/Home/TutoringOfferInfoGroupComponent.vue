@@ -87,6 +87,7 @@
 				display: flex;
 				flex-flow: row wrap;
 				justify-content: center;
+				
 
 				// border: 1px solid green;
 
@@ -99,13 +100,17 @@
 				display: flex;
 				flex-flow: row wrap;
 				// border: 1px solid blue;
-				justify-content: center;
+				justify-content: flex-start;
 
+				& > div{
+					height: fit-content;
+				}
 			}
 
 			.tutoring-offer-info-component {
 				margin: 16px;
-				box-shadow: 0 0 10px 1px rgba($color: #000000, $alpha: 0.15);
+				box-shadow: 0 0 10px 1px rgba($color: #000000, $alpha: 0.06);
+				;
 			}
 		}
 	}

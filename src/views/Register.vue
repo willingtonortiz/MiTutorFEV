@@ -2,103 +2,128 @@
   <div class="register-container">
     <header>
       <div class="logo">
-
         <router-link to="/login">
           <img src="../assets/images/logo.png" />
         </router-link>
-      </div>
-
-      <div class="field-login">
-        <a>
-          <button>Ingresar</button>
-        </a>
       </div>
     </header>
 
     <div class="register-body">
       <form @submitForm="checkForm" class="register-cont">
-        <h2>Registro</h2>
-
-        <div class="field">
-          <label>Nombres</label>
-          <input required v-model="name" name="Name" placeholder="Ingrese sus nombres" />
+        <div class="title-register">
+          <h2>Registro</h2>
         </div>
 
-        <div class="field">
-          <label>Apellidos</label>
-          <input required v-model="lastname" name="Lastname" placeholder="Ingrese sus apellidos" />
+        <div class="field-group">
+          <div class="field">
+            <label>Nombres</label>
+            <input
+              required
+              v-model="name"
+              name="Name"
+              placeholder="Ingrese sus nombres"
+            />
+          </div>
+
+          <div class="field">
+            <label>Apellidos</label>
+            <input
+              required
+              v-model="lastname"
+              name="Lastname"
+              placeholder="Ingrese sus apellidos"
+            />
+          </div>
         </div>
-        <div class="field">
-          <label>Carrera</label>
-          <input required v-model="career" name="Career" placeholder="Ingrese su carrera" />
+        <div class="field-group">
+          <div class="field">
+            <label>Carrera</label>
+            <input
+              required
+              v-model="career"
+              name="Career"
+              placeholder="Ingrese su carrera"
+            />
+          </div>
+          <div class="field">
+            <label>Correo electrónico</label>
+            <input
+              required
+              v-model="email"
+              v-bind:class="{ 'not-valid': isEmailExist }"
+              v-on:focusout="validateEmail"
+              type="email"
+              name="Email"
+              placeholder="Ingrese sus email"
+            />
+            <p
+              v-if="isEmailExist"
+              style="color:#ff4766; margin-top:0.5em; font-size:16px;"
+            >
+              Este correo ya existe, por favor ingrese uno diferente
+            </p>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field">
+            <label>Usuario</label>
+            <input
+              required
+              v-model="username"
+              name="Username"
+              placeholder="Ingrese su nombre de usuario"
+              v-on:focusout="validateUsername"
+              v-bind:class="{ 'not-valid': isUsernameExist }"
+            />
+            <p
+              v-if="isUsernameExist"
+              style="color:#ff4766; margin-top:0.5em; font-size:16px;"
+            >
+              Este usuario ya existe, por favor ingrese uno diferente
+            </p>
+          </div>
+
+          <div class="field">
+            <label>Contraseña</label>
+            <input
+              required
+              v-model="password"
+              type="password"
+              name="Password"
+              placeholder="Ingrese su contraseña"
+            />
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field">
+            <label>Universidad</label>
+            <select required v-model="university" name="University">
+              <option
+                v-for="u in universities"
+                :value="u.universityId"
+                v-bind:key="u.id"
+                >{{ u.name }}</option
+              >
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Semestre</label>
+            <select required v-model="semester" name="Semester">
+              <option value="1">Primer ciclo</option>
+              <option value="2">Segundo ciclo</option>
+              <option value="3">Tercer ciclo</option>
+              <option value="4">Cuarto ciclo</option>
+              <option value="5">Quinto ciclo</option>
+              <option value="6">Sexto ciclo</option>
+              <option value="7">Septimo ciclo</option>
+              <option value="8">Octavo ciclo</option>
+              <option value="9">Noveno ciclo</option>
+              <option value="10">Décimo ciclo</option>
+            </select>
+          </div>
         </div>
 
-        <div class="field">
-          <label>Correo electrónico</label>
-          <input
-            required
-            v-model="email"
-            v-bind:class="{'not-valid':isEmailExist}"
-            v-on:focusout="validateEmail"
-            type="email"
-            name="Email"
-            placeholder="Ingrese sus email"
-          />
-          <p
-            v-if="isEmailExist"
-            style="color:#ff4766; margin-top:0.5em; font-size:16px;"
-          >Este correo ya existe, por favor ingrese uno diferente</p>
-        </div>
-
-        <div class="field">
-          <label>Universidad</label>
-          <select required v-model="university" name="University">
-            <option v-for="u in universities" :value="u.universityId" v-bind:key="u.id">{{u.name}}</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Semestre</label>
-          <select required v-model="semester" name="Semester">
-            <option value="1">Primer ciclo</option>
-            <option value="2">Segundo ciclo</option>
-            <option value="3">Tercer ciclo</option>
-            <option value="4">Cuarto ciclo</option>
-            <option value="5">Quinto ciclo</option>
-            <option value="6">Sexto ciclo</option>
-            <option value="7">Septimo ciclo</option>
-            <option value="8">Octavo ciclo</option>
-            <option value="9">Noveno ciclo</option>
-            <option value="10">Décimo ciclo</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Usuario</label>
-          <input
-            required
-            v-model="username"
-            name="Username"
-            placeholder="Ingrese su nombre de usuario"
-            v-on:focusout="validateUsername"
-            v-bind:class="{'not-valid':isUsernameExist}"
-          />
-          <p
-            v-if="isUsernameExist"
-            style="color:#ff4766; margin-top:0.5em; font-size:16px;"
-          >Este usuario ya existe, por favor ingrese uno diferente</p>
-        </div>
-
-        <div class="field">
-          <label>Contraseña</label>
-          <input
-            required
-            v-model="password"
-            type="password"
-            name="Password"
-            placeholder="Ingrese su contraseña"
-          />
-        </div>
         <div class="field">
           <button v-on:click="checkForm" type="button">Registrarme</button>
         </div>
@@ -116,7 +141,7 @@ import { RegisterUser, isUsername, isEmail } from "../Services/UserService";
 import { Person } from "../Models/Person";
 
 import { UniversityService } from "../Services/UniversityService";
-import { User } from '../Models/User';
+import { User } from "../Models/User";
 export default Vue.extend({
   name: "Register",
   data(): UserRegister {
@@ -165,13 +190,11 @@ export default Vue.extend({
           semester: this.semester,
           universityId: this.university,
           career: this.career
-          
         };
 
         console.log(newUser);
         await RegisterUser(newUser).then(() => {
           this.$router.push("/login");
-          
         });
       }
     },
@@ -207,7 +230,13 @@ export default Vue.extend({
 }
 
 .register-container {
+  height: 100vh;
+  overflow: auto;
+
   padding: 2.5em;
+  background: url("../assets/images/RegisterBackground.png");
+  background-size: cover;
+  background-position: center center;
 }
 
 .register-container header {
@@ -228,17 +257,51 @@ export default Vue.extend({
   cursor: pointer;
   font-size: 1.25em;
 }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 20px;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px white;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: $primary-color;
+}
+.register-body {
+  width: 1000px;
+  height: 600px;
+  position: absolute;
+  left: 40%;
+  top: 5%;
+
+  padding: 24px 24px 24px 24px;
+}
+
+.register-body .field-group {
+  display: flex;
+}
 .register-container .register-body .field {
   display: flex;
   flex-direction: column;
-  margin: 1.25em 0;
+  margin: 1.25em;
   text-align: left;
 }
 
 .register-container .register-body h2 {
   display: flex;
   justify-content: flex-start;
+  margin-left: 0.75em;
 }
 
 .register-container .register-body .register-cont .field label {
@@ -263,16 +326,12 @@ export default Vue.extend({
 }
 
 .register-container .register-body .field select {
-  width: 450px;
+  width: 360px;
   padding: 12px;
   border: 1px solid #bfbfbf;
   color: $primary-text;
   font-size: 18px;
   border-radius: 6px;
-}
-
-.register-body .field:last-child {
-  margin-top: 2em !important;
 }
 
 .register-container .register-body .field button {
@@ -288,15 +347,16 @@ export default Vue.extend({
   font-size: 1.25em;
 }
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
   .register-container .register-body .field select {
     width: 300px;
   }
-  .field-login{display: none}
-
-  .register-container header{
-    padding: .5em 0 !important;
+  .field-login {
+    display: none;
   }
 
+  .register-container header {
+    padding: 0.5em 0 !important;
+  }
 }
 </style>

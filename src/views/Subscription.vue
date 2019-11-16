@@ -7,6 +7,10 @@
     </header>
     <div class="container-subscription">
       <div class="subscription-body">
+
+        
+        <img src="../assets/images/Suscripcion.png" alt="">
+
         <h2>Bienvenido a la membresía mi tutor</h2>
         <p>Necesitamos que completes algunos datos para el pago de tu suscripción como tutor</p>
         <form @submitForm="subscription" class="subscription-form">
@@ -87,7 +91,7 @@ export default Vue.extend({
   margin: 0 auto;
 }
 .subscription-body h2 {
-  color: $primary-color;
+  color: $green;
 }
 .subscription-body p {
   color: $primary-text;
@@ -98,7 +102,7 @@ export default Vue.extend({
   flex-direction: column;
   align-items: flex-start;
   width: fit-content;
-  margin: 4em auto 0 auto;
+  margin: 1em auto 0 auto;
 }
 
 .subscription-body .subscription-form .field {
@@ -114,11 +118,12 @@ export default Vue.extend({
   width: 300px;
   border-radius: 4px;
   border: 1px solid #bfbdbf;
-  padding: 12px 12px;
+  padding: 12px 22px;
+  font-size: 18px
 }
 .subscription-body .subscription-form button {
   margin-top: 1em;
-  background: $primary-color;
+  background: $green;
   color: $white;
   border: none;
   width: 300px;
@@ -127,6 +132,7 @@ export default Vue.extend({
   cursor: pointer;
   font-size: 18px;
   font-weight: 600;
+  box-shadow: 0 8px 24px #2fe49aaa
 }
 @media (max-width: 720px) {
   header {

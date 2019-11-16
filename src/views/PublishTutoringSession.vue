@@ -298,8 +298,9 @@ export default Vue.extend ({
         let offerService = new TutoringOfferService();
 
         tutoringOfferObj.TutoringSessionRequests = this.SessionsCreated;
-
+        tutoringOfferObj.TutorId =  AuthenticationService.userValue.id;
         console.log("Publicando la oferta completa");
+        console.log(tutoringOfferObj);
         offerService.createTutoringOffer(tutoringOfferObj);
         this.cancel();  
       } else{

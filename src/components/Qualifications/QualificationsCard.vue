@@ -46,11 +46,11 @@ export default Vue.extend({
         font-weight: 600;
     }
     .qualification-comment-container .comment{
-        margin-top: .5em;
+        margin-top: .2em;
         font-size: 18px;
         opacity: .67;
         text-align: left;
-        margin-left: 3.5em;
+        margin-left: 68px;
     }
 
 </style>

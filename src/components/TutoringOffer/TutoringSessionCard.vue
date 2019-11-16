@@ -51,9 +51,10 @@ export default Vue.extend({
 .card-session {
   width: fit-content;
   padding: 12px 3em 12px 12px;
-  border-radius: 4px;
-  //border: 1px solid #bfbfbf;
-  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  
+  border: 1px solid #eeeeee;
+  
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   margin: 1.25em 1.25em 0 0;
@@ -91,7 +92,7 @@ export default Vue.extend({
 }
 
 .card-session:hover {
-  box-shadow: 0 0px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0px 12px rgba(0, 0, 0, 0.09);
 }
 .card-session:active {
   transform: scale(0.95);
