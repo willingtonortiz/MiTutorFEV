@@ -1,8 +1,8 @@
 <template>
     <div class="field">
         <p>
-        {{topic.name}}
-        <button  @click="$emit('del-topic',topic.id)" class="del">x</button>
+        {{element}}
+        <button  @click="$emit('del-element')" class="del">x</button>
         </p>
     </div>
 
@@ -10,8 +10,8 @@
 
 <script>
 export default {
-    name:'TopicElement',
-    props: ["topic"],
+    name:'ElementList',
+    props: ["element"],
 }
 </script>
 

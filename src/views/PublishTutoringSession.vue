@@ -57,6 +57,8 @@
           <textarea name="Description" v-model="TutoringSession.Description" cols="30" rows="10"></textarea>
         </div>
 
+   
+
         <div class="field">
           <label for>Seleccione un tema</label>
           <v-select
@@ -68,32 +70,42 @@
         </div>
       </form>
 
-      <div v-for="topic in TopicsSelected" :key="topic.id">
-        <TopicElement v-bind:topic="topic" v-on:del-topic="deleteTopic"></TopicElement>
+      <div v-if="TopicsSelected.length>0">
+          <div v-for="topic in TopicsSelected" :key="topic.id">
+              <ElementList v-bind:element="topic.name" v-on:del-element="deleteTopic(topic.id)"></ElementList>    
+          </div>  
       </div>
 
-      <div class="field" style="margin-top:5%">
+      <div class="field">
         <button
           class="btn"
           v-on:click="addSessionAux"
-          style=" margin-bottom:5%; width:100%;"> Crear Session</button>
+          style="width:100%; margin-bottom:5%"> {{bottomMessage}}</button>
       </div>
 
-      
-      <div v-if="SessionsCreated.length>0" style="margin-bottom:10%">
-          <h2 style="margin-top:5%">Sesiones creadas</h2>
-          <div class="sessionscreated" v-for="e in SessionsCreated" :key="e">
-            <p>Session N°:
-              {{e}}
-              <button v-on:click="deleteSessionAux(e)" class="del">x</button>
-            </p>
+     
+     
+      <div v-if="SessionsCreated.length>0">   
+         <hr /> 
+         <h2 style="margin-top:5%">Sesiones creadas</h2>
+         <div class="sessionscreated" v-for="(e,index) in SessionsCreated" :key="index" >
+           <p>Session N°:
+             {{index}}
+
+             <button v-on:click="updateSession(index)" class="upd">x</button>
+             <button v-on:click="deleteSessionAux(index)" class="del">x</button>
+           </p>      
+         </div>    
+      </div>
+
+ 
+      <div class="field" style="margin-top:5%;">   
+          <div style="float:left; margin-right:5%; ">
+             <button v-on:click="publish" class="btn"  style="width: 325px; margin-top:0%"  >Publicar oferta</button>
           </div>
-      </div>
-
-
-      <div v-if="SessionsCreated.length>0"  class="field" style="margin-top:5%">   
-          <button v-on:click="publish" class="btn" style="margin-right:5%">Publicar oferta</button>
-          <button v-on:click="cancel" class="btn">Cancelar</button>
+          <div>
+             <button v-on:click="cancel" class="btn" style="width: 335px; margin-top:0%">Cancelar</button>
+          </div>
       </div>
 
     </div>
@@ -111,13 +123,11 @@ import { mapActions, mapGetters } from "vuex";
 import { TutoringOfferRequest } from "../Models/TutoringOfferRequest";
 import { TutoringSessionRequest } from "../Models/TutoringSessionRequest";
 import { TutoringOfferService } from "../Services/TutoringOfferService";
-import TopicElement from "../components/PublishTutoring/TopicElement.vue";
 import { Topic } from '../Models/Topic';
+import ElementList from "../components/PublishTutoring/ElementList.vue";
 import AuthenticationService from '../Services/AuthenticationService';
 
-function arrayRemove(arr, value) {
-  return arr.filter(x => x.id !== value);
-}
+
 
 function containsTopic(id, list) {
   var i;
@@ -141,8 +151,8 @@ function testPrice(price){
 
 export default Vue.extend ({
   name: "PublishTutoringSession",
-  computed: mapGetters(["TutoringOfferCourse","TutoringSessions","TutoringOffer"]),
-  components: { vSelect, TopicElement },
+  computed: mapGetters(["TutoringOfferCourse","TutoringSessionByIndex","GetTutoringOffer"]),
+  components: { vSelect, ElementList },
   data() {
     return {
 
@@ -162,6 +172,9 @@ export default Vue.extend ({
       errors: [],
       validated: false, 
       SessionsCreated: [],
+      update :false,
+      bottomMessage: '',
+      sessionUpdateIndex: null
 
     };
   },
@@ -202,7 +215,7 @@ export default Vue.extend ({
           val = false; 
         }
 
-        if( this.TutoringSession.StartTime == null ){
+        if( this.TutoringSession.EndTime == null ){
           this.errors.push('Establezca la fecha de fin');
           val = false;
         } else if( this.TutoringSession.EndTime.length == 0 ){
@@ -225,35 +238,42 @@ export default Vue.extend ({
 
       this.checkForm();
 
-      if(this.validated){
+      if(this.validated) {
 
         for (let i =0 ; i<this.TopicsSelected.length; ++i) {
           this.TutoringSession.Topics.push(this.TopicsSelected[i].id);
         }
 
+        if(this.update){
+            this.SessionsCreated[this.sessionUpdateIndex]=this.TutoringSession;
+            this.sessionUpdateIndex=null;
+            this.update = false;
+            this.bottomMessage = 'Crear sesion';     
+          
+        } else {
+            this.SessionsCreated.push(this.TutoringSession);
+        }
 
-        this.addSession(this.TutoringSession);
-    
         this.TutoringSession = {
-            Place: '',
-            StartTime: '',
-            EndTime: '',
-            Description: '',
-            Price: '',
-            Topics: []
+                Place: '',
+                StartTime: '',
+                EndTime: '',
+                Description: '',
+                Price: '',
+                Topics: []
         };
 
         this.TopicsSelected= [];
         this.selected= null;
         this.errors= [];
         this.validated= false; 
-        
-        this.SessionsCreated.push(this.SessionsCreated.length);
-      }
+      }  
 
     },
 
-    onSelection() {
+    onSelection(value) {
+
+      console.log(value);
  
       if ( !containsTopic(this.selected.value, this.TopicsSelected) ) {
           this.TopicsSelected.push({
@@ -264,57 +284,76 @@ export default Vue.extend ({
     },
 
     deleteTopic(id) {
-      this.TopicsSelected = arrayRemove(this.TopicsSelected, id);
+      this.TopicsSelected = this.TopicsSelected.filter(x => x.id !== id);
     },
 
-    deleteSessionAux(index){
-
-      if(this.SessionsCreated.length>0){  
-        for(let i=index+1; i< this.SessionsCreated.length ;++i)
-           --this.SessionsCreated[i];
-      }
-
-      this.SessionsCreated[index]
-      this.SessionsCreated.splice(index,1); 
-      this.deleteSession(index);
+    deleteSessionAux(index){  
+      this.SessionsCreated.splice(index,1);  
     },
 
     publish(){
 
-      let tutoringOfferObj: TutoringOfferRequest = this.$store.getters.TutoringOffer;
-      let offerService = new TutoringOfferService();
-      console.log("Publicando la oferta completa");
-      offerService.createTutoringOffer(tutoringOfferObj);
-      this.cancel();
+      if(this.SessionsCreated.length >0){
+        let tutoringOfferObj: TutoringOfferRequest = this.$store.getters.GetTutoringOffer;
+        let offerService = new TutoringOfferService();
+
+        tutoringOfferObj.TutoringSessionRequests = this.SessionsCreated;
+        tutoringOfferObj.TutorId =  AuthenticationService.userValue.id;
+        console.log("Publicando la oferta completa");
+        console.log(tutoringOfferObj);
+        offerService.createTutoringOffer(tutoringOfferObj);
+        this.cancel();  
+      } else{
+        this.errors.push('Debe de haber minimo una sesion');
+      }
+
     },
 
     cancel(){
         this.reset();
-        this.TutoringSession = {
-            Place: '',
-            StartTime: '',
-            EndTime: '',
-            Description: '',
-            Price: '',
-            Topics: []
+        this.$router.push({name: 'home'});
+    },
+
+    updateSession(index){
+      
+        this.TutoringSession = this.SessionsCreated[index];
+
+        for(let i=0; i<this.TopicsByCourse.length ; ++i){
+          
+          for(let j=0; j<this.TutoringSession.Topics.length ; ++j){
+
+            if(this.TopicsByCourse[i].value === this.TutoringSession.Topics[j]){
+
+              this.TopicsSelected.push({
+                id:this.TopicsByCourse[i].value,
+                name: this.TopicsByCourse[i].label
+              });
+            
+            }
+          }
         }
 
-        this.TopicsSelected= [];
-        this.selected= null;
-        this.errors= [];
-        this.validated= false;
-        this.$router.push({name: 'home'});
+        this.TutoringSession.Topics = [];
 
-    }
+        this.update=true;
+        this.bottomMessage = 'Actualizar sesion';
+        this.sessionUpdateIndex=index;
+    },
 
   },
 
   async created() {
 
+    if(this.update == false){
+      this.bottomMessage = 'Crear sesion'
+    } else{
+      this.bottomMessage = 'Actualizar sesion'
+    }
+
+
 
     let offerService = new TutoringOfferService();
     let topics: Array<Topic> = await offerService.findTopicsByCourse(this.$store.getters.TutoringOfferCourse);
-
    
     for (let i = 0; i < topics.length; ++i) {
         
@@ -323,7 +362,27 @@ export default Vue.extend ({
           label: topics[i].name
         });
     }
+  },
+
+  destroyed(){
+        this.reset();
+        this.TutoringSession = {
+            Place: '',
+            StartTime: null,
+            EndTime: null,
+            Description: '',
+            Price: null,
+            Topics: [],
+            TutorId: null
+        }
+
+        this.TopicsSelected= [];
+        this.selected= null;
+        this.errors= [];
+        this.validated= false;
   }
+
+  
 });
 
 </script>
@@ -342,6 +401,17 @@ export default Vue.extend ({
 
 .del {
     background: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 5px 9px;
+    border-radius: 50%;
+    cursor: pointer;
+    float: right;
+  }
+
+
+.upd {
+    background: #0105f3;
     color: #fff;
     border: none;
     padding: 5px 9px;
@@ -384,6 +454,7 @@ export default Vue.extend ({
   display: flex;
   flex-direction: column;
 }
+ 
 
 .container-nuevatutoria .form-container form .field label {
   font-size: 20px;

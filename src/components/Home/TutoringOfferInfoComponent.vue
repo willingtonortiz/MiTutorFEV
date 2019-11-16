@@ -1,9 +1,7 @@
 <template>
 	<div v-on:click="navigateToDetails(tutoringOffer.id)" class="tutoring-offer-info-container">
 		<div class="tutoring-body">
-			<div class="image">
-				<p>{{ tutoringOffer.courseName | firstLetter }}</p>
-			</div>
+			
 
 			<div class="course-tutor">
 				<h1>{{ tutoringOffer.courseName | titlecase }}</h1>
@@ -97,13 +95,23 @@ import router from '../../router';
 		width: 300px;
 		padding: 16px 20px;
 		border-radius: 5px;
+		color: #000;
+		background: #fff;
 		cursor: pointer;
+
+		transition: all .2 ease-in-out;
+
+		&:hover{
+			background: rgb(79, 132, 238);
+			color: #fff;
+			box-shadow: 0 0 24px rgba(79,132,238,.5) !important;
+		}
 
 		.tutoring-body {
 			margin-bottom: 16px;
 
 			display: flex;
-			flex-flow: row nowrap;
+			flex-flow: row wrap;
 			justify-content: flex-start;
 			align-items: center;
 
@@ -124,11 +132,17 @@ import router from '../../router';
 			.course-tutor {
 				display: flex;
 				flex-flow: column nowrap;
+				
 
 				h1 {
 					font-weight: bold;
 					font-size: 18px;
 					margin-bottom: 4px;
+					text-align: left;
+					color: inherit;
+				}
+				p{
+					font-size: 18px;
 				}
 			}
 		}

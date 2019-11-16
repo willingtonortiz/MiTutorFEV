@@ -47,12 +47,12 @@ export default new Router({
             component: Subscription
         },
         {
-            path: "/tutor/:id/publishtutoringoffer",
+            path: "/tutor/:idUser/publishtutoringoffer",
             name: "publishTutoringOffer",
             component: PublishTutoringOffer
         },
         {
-            path: "/tutor/:id/publishtutoringsession",
+            path: "/tutor/publishtutoringsession",
             name: "publishTutoringSession",
             component: PublishTutoringSession
         },

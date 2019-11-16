@@ -64,6 +64,10 @@
 				height: 100px;
 				border: 1px solid green;
 				border-radius: 50%;
+
+				.row p{
+					font-size: 18px
+				}
 			}
 
 		}

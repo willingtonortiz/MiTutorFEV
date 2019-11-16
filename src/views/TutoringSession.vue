@@ -1,4 +1,6 @@
 <template>
+<div style="padding:16px 32px">
+<Header/>
 <div class="tutoring-session-container">
 
   <div class="view-tutoring-session">
@@ -30,6 +32,7 @@
     <QualificationCard v-for="(qualification,index) in Tutor.Qualifications" v-bind:key="index" v-bind:qualification="qualification"  ></QualificationCard>
   </div>
 </div>
+</div>
 </template>
 
 
@@ -41,10 +44,11 @@ import {  findCommentsByTutorId} from "../Services/QualificationService";
 import { reserve } from "../Services/TutoringSessionStudent";
 import QualificationCard from "../components/Qualifications/QualificationsCard.vue";
 import router from "../router";
+import Header from "../components/Header.vue";
 import AuthenticationService from "../Services/AuthenticationService";
 export default Vue.extend({
   name: "TutoringSession",
-  components:{QualificationCard},
+  components:{QualificationCard,Header},
   data() {
     return {
       TutoringSession: {
