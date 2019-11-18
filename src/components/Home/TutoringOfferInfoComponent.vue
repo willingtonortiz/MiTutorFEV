@@ -98,8 +98,8 @@ import router from '../../router';
 		color: #000;
 		background: #fff;
 		cursor: pointer;
+		transition: all .3s ease-in-out;
 
-		transition: all .2 ease-in-out;
 
 		&:hover{
 			background: rgb(79, 132, 238);

@@ -76,7 +76,7 @@ export default Vue.extend({
   },
   filters: {
     simpleDate: function(value: Date): string {
-      return new Date(value).toLocaleString();
+      return new Date(value).toLocaleDateString();
     }
   },
 

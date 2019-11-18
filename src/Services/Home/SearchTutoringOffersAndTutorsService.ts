@@ -5,6 +5,7 @@ import {TutoringOfferService} from "@/Services/TutoringOfferService";
 import {TutorInfo} from "@/dtos/input/TutorInfo";
 import {TutorsService} from "@/Services/TutorsService";
 
+// TODO: Implementar el concepto de sesión
 export default class SearchTutoringOffersAndTutorsService {
 
     public constructor() {
@@ -17,11 +18,11 @@ export default class SearchTutoringOffersAndTutorsService {
         try {
 
             const course: Course = await CourseService.findByUniversityIdAndCourseName(
-                1,
+                3,
                 courseName.toLowerCase()
             );
 
-            const tutoringOffers: Array<TutoringOfferInfo> = await TutoringOfferService.findByUniversityIdAndCourseId(1, course.id)
+            const tutoringOffers: Array<TutoringOfferInfo> = await TutoringOfferService.findByUniversityIdAndCourseId(3, course.id)
 
             tutoringOffers.forEach(x => {
                 x.startTime = new Date(x.startTime);
@@ -40,11 +41,11 @@ export default class SearchTutoringOffersAndTutorsService {
     ): Promise<Array<TutorInfo>> {
         try {
             const course: Course = await CourseService.findByUniversityIdAndCourseName(
-                1,
+                3,
                 courseName.toLowerCase()
             );
 
-            const tutors: Array<TutorInfo> = await TutorsService.findAllByUniversityIdAndCourseId(1, course.id)
+            const tutors: Array<TutorInfo> = await TutorsService.findAllByUniversityIdAndCourseId(3, course.id)
 
             return Promise.resolve(tutors);
 
