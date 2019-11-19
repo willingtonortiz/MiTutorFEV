@@ -3,63 +3,87 @@
     <div class="form-container">
       <h2>Nueva sesion</h2>
 
-      <div v-if="errors.length">
-        <b>Por favor corrija los siguientes errores:</b>
-
-        <ul style="margin-left:5%">
-          <li v-for="error in errors" :key="error">{{ error }}</li>
-        </ul>
-      </div>
-
       <form>
         <div class="field">
           <label for>Ubicacion</label>
           <input
             type="text"
-            v-model="TutoringSession.Place"
+            v-model.trim="$v.TutoringSession.Place.$model"
             name="Ubicacion"
             placeholder="Ingrese la ubicacion"
           />
+          <span
+            v-if="!$v.TutoringSession.Place.required && (this.$v.TutoringSession.Place.$dirty || !validated)"
+          >Este campo es obligatorio</span>
         </div>
 
         <div class="field">
           <label for>Fecha</label>
           <input
             type="date"
-            v-model="SessionDate"
+            v-model.trim="$v.SessionDate.$model"
             name="FechaSesion"
             placeholder="Ingrese la fecha"
           />
+          <span
+            v-if="!$v.SessionDate.required && (this.$v.SessionDate.$dirty || !validated)"
+          >Este campo es obligatorio</span>
         </div>
 
         <div class="field">
           <label for>Hora de inicio</label>
           <input
             type="time"
-            v-model="StartOfferTime"
-            name="FechaInicio"
+            v-model.trim="$v.StartOfferTime.$model"
+            name="HoraInicio"
             placeholder="Ingrese la fecha"
           />
+
+          <div v-if="this.$v.StartOfferTime.$dirty || !validated">
+            <span v-if="!$v.StartOfferTime.required">Este campo es obligatorio</span>
+          </div>
         </div>
 
         <div class="field">
           <label for>Hora de fin</label>
-          <input type="time" v-model="EndOfferTime" name="FechaFin" placeholder="Ingrese la fecha" />
+          <input
+            type="time"
+            v-model.trim="$v.EndOfferTime.$model"
+            name="HoraFin"
+            placeholder="Ingrese la fecha"
+          />
+
+          <div v-if="this.$v.EndOfferTime.$dirty || !validated">
+            <span v-if="!$v.EndOfferTime.required">Este campo es obligatorio</span>
+          </div>
         </div>
 
         <div class="field">
           <label for>Precio</label>
           <input
             type="text"
-            v-model="TutoringSession.Price"
+            v-model.trim="$v.TutoringSession.Price.$model"
             name="Precio"
             placeholder="Ingrese el precio"
           />
+
+          <div v-if="this.$v.TutoringSession.Price.$dirty || !validated">
+            <span v-if="!$v.TutoringSession.Price.required">Este campo es obligatorio</span>
+            <span v-if="!$v.TutoringSession.Price.checkPrice">Ingrese un precio valido</span>
+          </div>
         </div>
 
         <div class="field">
           <label for>Descripción</label>
-          <textarea name="Description" v-model="TutoringSession.Description" cols="30" rows="10"></textarea>
+          <textarea
+            name="Description"
+            v-model.trim="$v.TutoringSession.Description.$model"
+            cols="30"
+            rows="10"
+          >Este campo es obligatorio</textarea>
+          <span
+            v-if="!$v.TutoringSession.Description.required && (this.$v.TutoringSession.Description.$dirty || !validated)"
+          >Este campo es obligatorio</span>
         </div>
 
         <div class="field">
@@ -70,6 +94,9 @@
             :options="TopicsByCourse"
             @input="onSelection"
           ></v-select>
+          <span
+            v-if="!$v.TopicsSelected.required && (this.$v.TopicsSelected.$dirty || !validated)"
+          >Este campo es obligatorio</span>
         </div>
       </form>
 
@@ -126,6 +153,7 @@ import { TutoringOfferRequest } from "../Models/TutoringOfferRequest";
 import { TutoringSessionRequest } from "../Models/TutoringSessionRequest";
 import { TutoringOfferService } from "../Services/TutoringOfferService";
 import { Topic } from "../Models/Topic";
+import { required } from "vuelidate/lib/validators";
 import ElementList from "../components/PublishTutoring/ElementList.vue";
 import AuthenticationService from "../Services/AuthenticationService";
 
@@ -139,7 +167,7 @@ function containsTopic(id, list) {
   return false;
 }
 
-function testPrice(price) {
+function checkPrice(price) {
   let testPrice = +price;
 
   if (!isNaN(testPrice)) {
@@ -156,10 +184,15 @@ const addLeft0 = number => {
   return number;
 };
 
+const checkTimes = (start,end) => {
+  
+};
+
 export default Vue.extend({
   name: "PublishTutoringSession",
   computed: mapGetters(["TutoringOfferCourse", "GetTutoringOffer"]),
   components: { vSelect, ElementList },
+
   data() {
     return {
       TutoringSession: {
@@ -178,75 +211,62 @@ export default Vue.extend({
       TopicsByCourse: [],
       TopicsSelected: [],
       selected: null,
-      errors: [],
-      validated: false,
+      validated: true,
       SessionsCreated: [],
       update: false,
       sessionUpdateIndex: null
     };
   },
+
+  validations: {
+    TutoringSession: {
+      Place: {
+        required
+      },
+      Price: {
+        required,
+        checkPrice
+      },
+      Description: {
+        required
+      }
+    },
+    SessionDate: {
+      required
+    },
+    EndOfferTime: {
+      required
+    },
+    StartOfferTime: {
+      required
+    },
+    TopicsSelected: {
+      required
+    }
+  },
+
   methods: {
     ...mapActions(["addSession", "deleteSession", "reset"]),
 
     checkForm: function() {
-      this.errors = [];
-      let val = true;
-
-      if (this.TutoringSession.Place.length == 0) {
-        this.errors.push("Ingrese el lugar");
-        val = false;
-      }
-
-      if (this.TutoringSession.Description.length == 0) {
-        this.errors.push("Ingrese una descripcion");
-        val = false;
-      }
-
-      if (this.TutoringSession.Price == null) {
-        this.errors.push("Establezca un precio");
-        val = false;
-      } else {
-        if (
-          this.TutoringSession.Price.length == 0 ||
-          !testPrice(this.TutoringSession.Price)
-        ) {
-          this.errors.push("Establezca un precio");
-          val = false;
-        }
-      }
-
-      if (this.SessionDate == null) {
-        this.errors.push("Establezca la fecha");
-        val = false;
-      } else if (this.SessionDate.length == 0) {
-        this.errors.push("Establezca la fecha");
-        val = false;
-      }
-
-      if (this.StartOfferTime == null) {
-        this.errors.push("Establezca la hora de inicio");
-        val = false;
-      } else if (this.StartOfferTime.length == 0) {
-        this.errors.push("Establezca la hora de inicio");
-        val = false;
-      }
-
-      if (this.EndOfferTime == null) {
-        this.errors.push("Establezca la hora de fin");
-        val = false;
-      } else if (this.EndOfferTime.length == 0) {
-        this.errors.push("Establezca la hora de fin");
-        val = false;
-      }
-
-      if (this.TopicsSelected.length == 0) {
-        this.errors.push("Establezca como minimo un tema");
-        val = false;
-      }
-
-      if (val == true) {
-        this.validated = true;
-      }
+      if (
+       ((this.$v.TutoringSession.Place.$error ||
+        this.$v.TutoringSession.Price.$error ||
+        this.$v.TutoringSession.Description.$error ||
+        this.$v.SessionDate.$error ||
+        this.$v.EndOfferTime.$error ||
+        this.$v.StartOfferTime.$error ||
+        this.$v.TopicsSelected.$error) ||
+        (!this.$v.TutoringSession.Place.$dirty ||
+          !this.$v.TutoringSession.Price.$dirty ||
+          !this.$v.TutoringSession.Description.$dirty ||
+          !this.$v.SessionDate.$dirty ||
+          !this.$v.EndOfferTime.$dirty ||
+          !this.$v.StartOfferTime.$dirty)) 
+          && !this.update 
+      )
+        this.validated = false;
+      else this.validated = true;
     },
 
     clean() {
@@ -263,11 +283,10 @@ export default Vue.extend({
       this.SessionDate = null;
       this.EndOfferTime = null;
       this.StartOfferTime = null;
-
       this.TopicsSelected = [];
       this.selected = null;
-      this.errors = [];
-      this.validated = false;
+      this.validated = true;
+      this.$v.$reset();
     },
 
     addSessionAux() {
@@ -378,6 +397,9 @@ export default Vue.extend({
   },
 
   async created() {
+
+
+
     let offerService = new TutoringOfferService();
     let topics: Array<Topic> = await offerService.findTopicsByCourse(
       this.$store.getters.TutoringOfferCourse
