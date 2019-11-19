@@ -47,7 +47,7 @@ export default new Router({
             component: Subscription
         },
         {
-            path: "/tutor/:idUser/publishtutoringoffer",
+            path: "/tutor/publishtutoringoffer",
             name: "publishTutoringOffer",
             component: PublishTutoringOffer
         },
