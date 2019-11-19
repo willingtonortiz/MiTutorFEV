@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ReserveTutoringResponse } from "@/dtos/output/ReserveTutoringResponse";
 import { uri } from "./environment";
+import AuthenticationService from './AuthenticationService';
 
 export const reserve = async (  idStudent,  idTutoringSession): Promise<any> => {
   let response = {
@@ -14,3 +15,14 @@ export const reserve = async (  idStudent,  idTutoringSession): Promise<any> => 
     data: response
   });
 };
+
+
+export const getAllTutoringSessionByUser = async():Promise<any> =>{
+  
+  let response =  await axios.get(`https://localhost:5001/api/TutoringSessionStudents/user/${AuthenticationService.userValue.id}`);
+
+  return response.data;
+
+
+
+}
