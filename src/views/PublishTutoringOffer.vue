@@ -155,14 +155,13 @@ export default Vue.extend ({
 
     this.TutoringOffer = this.$store.getters.GetTutoringOffer;
 
-
-    
-
     let offerService = new TutoringOfferService();
     let tutorService = new TutorService();
     let tutorUniversity: UniversityResponse = await tutorService.findUniversity(AuthenticationService.userValue.id);
     console.log(tutorUniversity);
-    this.TutoringOffer.UniversityId = tutorUniversity.universityId;
+
+    this.TutoringOffer.UniversityId = tutorUniversity.id;
+
     let courses: Array<Course> = await offerService.findAllCoursesByUniversity(this.TutoringOffer.UniversityId);
 
 
@@ -179,13 +178,6 @@ export default Vue.extend ({
         }
       }
     }
-
-
-   
-
-
-        
-  
 
   },
 
@@ -207,10 +199,6 @@ export default Vue.extend ({
       this.errors= [];
 
   }
-
-  
-
-  
 
 });
 </script>

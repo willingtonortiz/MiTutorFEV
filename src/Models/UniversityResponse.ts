@@ -1,4 +1,4 @@
 export interface UniversityResponse {
-	universityId: number;
+	id: number;
 	name: string;
 }

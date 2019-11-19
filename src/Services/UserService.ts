@@ -2,13 +2,9 @@ import axios from "axios";
 import { uri } from "./environment";
 import { Person } from "@/Models/Person";
 import { User } from "@/Models/User";
-import {  SubscriptionDTO } from "../Models/SubscriptionDTO";
+import { SubscriptionDTO } from "../Models/SubscriptionDTO";
 
-
-export const RegisterUser = async (
-	newuser : User & Person
-): Promise<any> => {
-
+export const RegisterUser = async (newuser: User & Person): Promise<any> => {
 	console.log(newuser);
 
 	return await axios({
@@ -17,8 +13,12 @@ export const RegisterUser = async (
 		url: `${uri}/Authentication/register`,
 		data: newuser
 	})
-		.then(async (data: any) => {console.log(data)})
-		.catch((e: any) => { console.log(e); });
+		.then(async (data: any) => {
+			console.log(data);
+		})
+		.catch((e: any) => {
+			console.log(e);
+		});
 };
 
 export const isUsername = async (username: any): Promise<any> => {
@@ -39,14 +39,19 @@ export const isEmail = async (email: any): Promise<any> => {
 	return res.data;
 };
 
-export const subscription =  async (subscriptionDTO: SubscriptionDTO): Promise<any> =>{
+export const subscription = async (
+	subscriptionDTO: SubscriptionDTO
+): Promise<any> => {
 	return await axios({
-		headers: {"Content-Type": "application/json"},
-		method:"POST",
+		headers: { "Content-Type": "application/json" },
+		method: "POST",
 		url: `${uri}/Users/Subscription`,
-		data:subscriptionDTO
+		data: subscriptionDTO
 	})
-	.then ( (data)=>{console.log(data)})
-	.catch( (e)=>{console.log(e)})
-}
-
+		.then(data => {
+			console.log(data);
+		})
+		.catch(e => {
+			console.log(e);
+		});
+};

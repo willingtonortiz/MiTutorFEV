@@ -295,10 +295,14 @@ export default Vue.extend ({
 
       if(this.SessionsCreated.length >0){
         let tutoringOfferObj: TutoringOfferRequest = this.$store.getters.GetTutoringOffer;
+        console.log(tutoringOfferObj);
         let offerService = new TutoringOfferService();
 
         tutoringOfferObj.TutoringSessionRequests = this.SessionsCreated;
         tutoringOfferObj.TutorId =  AuthenticationService.userValue.id;
+        tutoringOfferObj.UniversityId = 3;
+
+
         console.log("Publicando la oferta completa");
         console.log(tutoringOfferObj);
         offerService.createTutoringOffer(tutoringOfferObj);
