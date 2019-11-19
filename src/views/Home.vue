@@ -32,6 +32,20 @@
 
         <TutorInfoGroupComponent></TutorInfoGroupComponent>
       </div>
+
+      <div class="tutoringSessionsToAssist">
+          <h2>Tutorías por asistir</h2>
+          <div class="list-sessions-active" v-if="tutoringSessions">
+              <div  class="card-sessionHome" v-for="(session,index) in tutoringSessions">
+                  <p>Fecha: {{session.startTime | simpleDate}}</p>
+                  <p>Ubicacion: {{session.place}}</p>
+              </div>
+          </div>
+          <div v-else>
+            <h2>No tienes tutorías por asistir</h2>
+          </div>
+
+      </div>
     </div>
   </div>
 </template>
@@ -46,7 +60,8 @@ import TutoringOfferInfoGroupComponent from "../components/Home/TutoringOfferInf
 import HomeSideBarComponent from "@/components/Home/HomeSideBarComponent.vue";
 import TutorInfoGroupComponent from "@/components/Home/TutorInfoGroupComponent.vue";
 import AuthenticationService from "../Services/AuthenticationService";
-
+import { getAllTutoringSessionByUser } from "../Services/TutoringSessionStudent";
+import { TutoringSessionResponse } from "../dtos/output/TutoringSessionResponse";
 @Component({
   components: {
     TutorInfoGroupComponent,
@@ -54,7 +69,6 @@ import AuthenticationService from "../Services/AuthenticationService";
     TutoringOfferInfoGroupComponent
   },
   props: {},
-
   filters: {
     firstLetter: function(value: string): string {
       if (!value) return "";
@@ -67,15 +81,7 @@ import AuthenticationService from "../Services/AuthenticationService";
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
     simpleDate: function(value: Date): string {
-      if (!value) return "";
-
-      return (
-        value.getDate() +
-        "/" +
-        (value.getMonth() + 1) +
-        "/" +
-        value.getFullYear()
-      );
+      return new Date(value).toLocaleDateString();
     },
     simpleTime: function(value: Date): string {
       if (!value) return "";
@@ -87,15 +93,24 @@ import AuthenticationService from "../Services/AuthenticationService";
 export default class Home extends Vue {
   public courseName: string;
   public name: string;
-
+  public tutoringSessions: any;
   public constructor() {
     super();
     // Servicios
 
     this.courseName = "";
     this.name = AuthenticationService.userValue.name;
+    this.tutoringSessions =  this.init().then((s) => {
+      return s;
+    });
   }
-
+  async init() {
+    // do something async and call the callback:
+    let res = await getAllTutoringSessionByUser();
+    this.tutoringSessions = res;
+    return res;
+    
+  }
   public async findTutoringOffersAndTutors() {
     if (this.courseName.length === 0) {
       return;
@@ -149,6 +164,32 @@ export default class Home extends Vue {
 @media only screen and (min-width: 1024px) {
   .home-sub {
     display: flex;
+  }
+
+  .tutoringSessionsToAssist{
+    margin-top: 48px;
+    padding: 48px 16px 16px 16px;
+    width: 500px;
+    height: 700px;
+    overflow: auto;
+    text-align: left;
+    background: $primary-color;
+    border-radius: 6px;
+  }
+  .tutoringSessionsToAssist h2{color: #ffffff; text-align: center;}
+  .list-sessions-active{
+    display: flex;
+    flex-direction: column;
+  }
+  .card-sessionHome{
+    margin: 1em 0 ;
+    padding: 16px;
+    background: rgba(255,255,255,.1);
+    border-radius: 4px;
+  }
+  .card-sessionHome p{
+    margin: .5em 0;
+    color: #ffffff;
   }
   .home-container {
     height: 100vh;

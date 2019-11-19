@@ -18,11 +18,11 @@ export default class SearchTutoringOffersAndTutorsService {
         try {
 
             const course: Course = await CourseService.findByUniversityIdAndCourseName(
-                3,
+                1,
                 courseName.toLowerCase()
             );
 
-            const tutoringOffers: Array<TutoringOfferInfo> = await TutoringOfferService.findByUniversityIdAndCourseId(3, course.id)
+            const tutoringOffers: Array<TutoringOfferInfo> = await TutoringOfferService.findByUniversityIdAndCourseId(1, course.id)
 
             tutoringOffers.forEach(x => {
                 x.startTime = new Date(x.startTime);
@@ -41,11 +41,11 @@ export default class SearchTutoringOffersAndTutorsService {
     ): Promise<Array<TutorInfo>> {
         try {
             const course: Course = await CourseService.findByUniversityIdAndCourseName(
-                3,
+                1,
                 courseName.toLowerCase()
             );
 
-            const tutors: Array<TutorInfo> = await TutorsService.findAllByUniversityIdAndCourseId(3, course.id)
+            const tutors: Array<TutorInfo> = await TutorsService.findAllByUniversityIdAndCourseId(1, course.id)
 
             return Promise.resolve(tutors);
 
