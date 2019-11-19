@@ -7,6 +7,7 @@ import {Topic} from '@/Models/Topic';
 import {TutorService} from "../Services/TutorService";
 import {UniversityResponse} from '@/Models/UniversityResponse';
 import {TutoringOfferResponse} from '@/dtos/output/TutoringOfferResponse';
+import { TutoringSessionResponse } from '@/dtos/output/TutoringSessionResponse';
 
 export class TutoringOfferService {
     constructor() {
@@ -90,6 +91,20 @@ export class TutoringOfferService {
         } catch (error) {
             return Promise.reject(error);
         }
+
+    }
+
+
+    public async getSession(sessionId: number): Promise<TutoringSessionResponse>  {
+        try {
+            const response: AxiosResponse<TutoringSessionResponse> = await axios.get<TutoringSessionResponse>(
+                `${uri}/tutoringSessions/${sessionId}`
+            );
+            return Promise.resolve(response.data);
+        } catch (error) {
+            return Promise.reject(error);
+        }
+        
 
     }
 }

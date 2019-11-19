@@ -262,7 +262,8 @@ export default Vue.extend({
           !this.$v.TutoringSession.Description.$dirty ||
           !this.$v.SessionDate.$dirty ||
           !this.$v.EndOfferTime.$dirty ||
-          !this.$v.StartOfferTime.$dirty)) 
+          !this.$v.StartOfferTime.$dirty ||
+          this.TopicsSelected.length==0)) 
           && !this.update 
       )
         this.validated = false;
@@ -293,12 +294,16 @@ export default Vue.extend({
       this.checkForm();
 
       if (this.validated) {
+
         let startTimeAux: Date = new Date(
           this.SessionDate + " " + this.StartOfferTime
         );
         let endTimeAux: Date = new Date(
           this.SessionDate + " " + this.EndOfferTime
         );
+
+        console.log(startTimeAux.getUTCDate);
+        console.log( endTimeAux);
 
         this.TutoringSession.StartTime = startTimeAux;
         this.TutoringSession.EndTime = endTimeAux;
@@ -345,7 +350,6 @@ export default Vue.extend({
         let offerService = new TutoringOfferService();
 
         tutoringOfferObj.TutoringSessionRequests = this.SessionsCreated;
-        tutoringOfferObj.TutorId = AuthenticationService.userValue.id;
         console.log("Publicando la oferta completa");
         console.log(tutoringOfferObj);
         offerService.createTutoringOffer(tutoringOfferObj);

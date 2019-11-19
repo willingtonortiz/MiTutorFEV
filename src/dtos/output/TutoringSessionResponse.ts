@@ -7,4 +7,5 @@ export interface TutoringSessionResponse{
     Description: string;
     Price: number;
     Topics: Array<string>;
+    TutorId : number;
 }

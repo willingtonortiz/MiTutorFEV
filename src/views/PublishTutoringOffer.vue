@@ -160,8 +160,12 @@ export default Vue.extend({
     let tutorUniversity: UniversityResponse = await tutorService.findUniversity(
       tutorId
     );
-    console.log(tutorUniversity);
+
+
     this.TutoringOffer.UniversityId = tutorUniversity.universityId;
+
+   
+
     let courses: Array<Course> = await offerService.findAllCoursesByUniversity(
       this.TutoringOffer.UniversityId
     );
