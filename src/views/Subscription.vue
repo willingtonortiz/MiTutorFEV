@@ -74,7 +74,7 @@ export default Vue.extend({
 
         await subscription(subscriptionDTO).then(() => {
           const user: UserCredentials = AuthenticationService.userValue;
-          user.role = "tutor";
+          user.role = "TUTOR";
           localStorage.setItem("currentUser", JSON.stringify(user));
 
           this.$router.push("/home");

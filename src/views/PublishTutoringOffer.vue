@@ -3,38 +3,48 @@
     <div class="form-container">
       <h2>Nueva oferta</h2>
 
-      <div v-if="errors.length">
-        <b>Por favor corrija los siguientes errores:</b>
-        <ul style="margin-left:5%">
-          <li v-for="error in errors" :key="error">{{ error }}</li>
-        </ul>
-      </div>
-
       <form>
         <div class="field">
           <label>Seleccione el curso</label>
           <v-select
             class="style-chooser"
-            v-model="selected"
+            v-model.trim="$v.selected.$model"
             :options="courses"
             @input="onSelection"
           ></v-select>
+
+          <span
+            v-if="!$v.selected.required && (this.$v.selected.$dirty || !validated)"
+          >Este campo es obligatorio</span>
         </div>
 
         <div class="field">
           <label>Participantes máximos en cada sesión</label>
           <input
             type="number"
-            v-model="TutoringOffer.Capacity"
+            v-model.trim="$v.TutoringOffer.Capacity.$model"
             name="Capacity"
             placeholder="Ingrese el numero de participantes máximos"
             :max="5"
           />
+
+          <div v-if="this.$v.TutoringOffer.Capacity.$dirty || !validated">
+            <span v-if="!$v.TutoringOffer.Capacity.required">Este campo es obligatorio</span>
+            <span v-if="!$v.TutoringOffer.Capacity.checkCapacity">La capacidad maxima es 5</span>
+          </div>
         </div>
 
         <div class="field">
           <label>Descripción</label>
-          <textarea name="Description" cols="30" rows="10" v-model="TutoringOffer.Description"></textarea>
+          <textarea
+            name="Description"
+            cols="30"
+            rows="10"
+            v-model.trim="$v.TutoringOffer.Description.$model"
+          ></textarea>
+          <span
+            v-if="!$v.TutoringOffer.Description.required && (this.$v.TutoringOffer.Description.$dirty || !validated)"
+          >Este campo es obligatorio</span>
         </div>
       </form>
 
@@ -61,11 +71,17 @@ import AuthenticationService from "../Services/AuthenticationService";
 import { Course } from "../Models/Course";
 import { TutorService } from "../Services/TutorService";
 import { UniversityResponse } from "../Models/UniversityResponse";
+import { required } from "vuelidate/lib/validators";
+
+const checkCapacity = capacity => {
+  return capacity < 5;
+};
 
 export default Vue.extend({
   name: "PublishTutoringOffer",
   computed: mapGetters(["GetTutoringOffer"]),
   components: { vSelect },
+
   data() {
     return {
       TutoringOffer: {
@@ -79,45 +95,45 @@ export default Vue.extend({
 
       courses: [],
       selected: null,
-      validated: false,
-      errors: []
+      validated: true,
+      update: false
     };
   },
+
+  validations: {
+    TutoringOffer: {
+      Capacity: {
+        required,
+        checkCapacity
+      },
+      Description: {
+        required
+      }
+    },
+    selected: {
+      required
+    }
+  },
+
   methods: {
     ...mapActions(["addOffer"]),
 
     onSelection() {},
 
     checkForm: function() {
-      this.errors = [];
-      let val = true;
+      if (this.TutoringOffer.Capacity != null) console.log("ñipokk´k");
 
-      if (this.TutoringOffer.Capacity == null) {
-        this.errors.push("Establezca la capacidad");
-        val = false;
-      } else if (this.TutoringOffer.Capacity.length == 0) {
-        this.errors.push("Establezca la capacidad");
-        val = false;
-      }
-
-      if (this.TutoringOffer.Capacity > 5) {
-        this.errors.push("La capacidad no debe ser mayor a 5");
-        val = false;
-      }
-
-      if (this.TutoringOffer.Description.length == 0) {
-        this.errors.push("Complete la descripcion");
-        val = false;
-      }
-
-      if (this.selected == null) {
-        this.errors.push("Seleccione un curso");
-        val = false;
-      }
-
-      if (val == true) {
-        this.validated = true;
-      }
+      if (
+        (this.$v.TutoringOffer.Capacity.$error ||
+          this.$v.TutoringOffer.Description.$error ||
+          this.$v.selected.$error ||
+          (!this.$v.TutoringOffer.Capacity.$dirty ||
+            !this.$v.TutoringOffer.Description.$dirty ||
+            !this.$v.selected.$dirty)) &&
+        !this.update
+      )
+        this.validated = false;
+      else this.validated = true;
     },
 
     addOfferAux() {
@@ -134,6 +150,8 @@ export default Vue.extend({
   async created() {
     this.TutoringOffer = this.$store.getters.GetTutoringOffer;
 
+    if (this.TutoringOffer.Capacity != null) this.update = true;
+
     let tutorId = AuthenticationService.userValue.id;
     this.TutoringOffer.TutorId = tutorId;
 
@@ -142,8 +160,12 @@ export default Vue.extend({
     let tutorUniversity: UniversityResponse = await tutorService.findUniversity(
       tutorId
     );
-    console.log(tutorUniversity);
+
+
     this.TutoringOffer.UniversityId = tutorUniversity.universityId;
+
+   
+
     let courses: Array<Course> = await offerService.findAllCoursesByUniversity(
       this.TutoringOffer.UniversityId
     );
@@ -179,6 +201,7 @@ export default Vue.extend({
     this.selected = null;
     this.validate = false;
     this.errors = [];
+    this.update = false;
   }
 });
 </script>

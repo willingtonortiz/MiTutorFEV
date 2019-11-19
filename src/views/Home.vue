@@ -36,7 +36,7 @@
       <div class="tutoringSessionsToAssist">
           <h2>Tutorías por asistir</h2>
           <div class="list-sessions-active" v-if="tutoringSessions">
-              <div  class="card-sessionHome" v-for="(session,index) in tutoringSessions">
+              <div  class="card-sessionHome" v-for="(session,index) in tutoringSessions" :key="index">
                   <p>Fecha: {{session.startTime | simpleDate}}</p>
                   <p>Ubicacion: {{session.place}}</p>
               </div>
