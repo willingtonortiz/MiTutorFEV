@@ -122,7 +122,7 @@ export default Vue.extend({
 
     checkForm: function() {
       if (this.TutoringOffer.Capacity != null) console.log("ñipokk´k");
-
+      
       if (
         (this.$v.TutoringOffer.Capacity.$error ||
           this.$v.TutoringOffer.Description.$error ||
