@@ -81,7 +81,7 @@ export default class TutorTutoringsComponent extends Vue {
 
   public async navigateToPublishNewTutoringOffer() {
     let idUser = AuthenticationService.userValue.id;
-    this.$router.push(`/tutor/${idUser}/publishtutoringoffer`);
+    this.$router.push(`/tutor/publishtutoringoffer`);
   }
   public async initialize() {
     try {

@@ -44,15 +44,8 @@ export default Vue.extend({
 	name: "TutoringSessionCard",
 	props: ["session", "TutoringOffer"],
 	methods: {
-		navigateSessionDetails: (id, session, idTutor) => {
-			router.push({
-				name: "tutoringSession",
-				params: {
-					id: id,
-					TutoringSessionAux: session,
-					tutorId: idTutor
-				}
-			});
+		navigateSessionDetails: (id) => {
+			router.push(`/tutoringsession/${id}`);
 		}
 	},
 	filters: {
