@@ -74,7 +74,7 @@ import { UniversityResponse } from "../Models/UniversityResponse";
 import { required } from "vuelidate/lib/validators";
 
 const checkCapacity = capacity => {
-  return capacity < 5;
+  return capacity <= 5;
 };
 
 export default Vue.extend({
@@ -161,7 +161,7 @@ export default Vue.extend({
     );
 
 
-    this.TutoringOffer.UniversityId = tutorUniversity.universityId;
+    this.TutoringOffer.UniversityId = tutorUniversity.id;
 
    
 

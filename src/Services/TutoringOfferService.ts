@@ -46,7 +46,7 @@ export class TutoringOfferService {
 
         let tutorServ: TutorService = new TutorService();
         let university: UniversityResponse = await tutorServ.findUniversity(tutoringOffer.TutorId);
-        tutoringOffer.UniversityId = university.universityId;
+        tutoringOffer.UniversityId = university.id;
 
         try {
 
