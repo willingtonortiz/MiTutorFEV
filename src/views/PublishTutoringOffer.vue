@@ -121,7 +121,6 @@ export default Vue.extend({
     onSelection() {},
 
     checkForm: function() {
-      if (this.TutoringOffer.Capacity != null) console.log("ñipokk´k");
       
       if (
         (this.$v.TutoringOffer.Capacity.$error ||
